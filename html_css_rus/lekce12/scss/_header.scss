@@ -1,0 +1,8 @@
+@use 'variable';  // as * позволяет использовать переменные без префикса пространства имён.
+// @import 'variable'; // более старая версия но она всё равно работает
+
+header{
+    width: 100%;
+    height: 100px;
+    background-color: variable.$primaryColor; // eсли не использовать as *, если использовать то variable. - писать не нужно 
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Основное назначение <form>
+Сбор данных от пользователя
+Например: имя, e-mail, пароль, сообщение, выбор товара.
+Отправка данных
+Форма может отправлять данные:
+на сервер (через атрибуты action и method),
+или обрабатываться прямо на клиенте с помощью JavaScript.
+Группировка полей
+<form> объединяет элементы управления:
+<label> — подписи к полям.
+<input> — текстовые поля, пароли, чекбоксы, радио-кнопки, кнопки.
+<textarea> — многострочный ввод.
+<select> — выпадающие списки.
+<button> — кнопки отправки или сброса. -->
+    <!-- <form>
+        <h2>Kontaktujte nás</h2>
+        <label for="name">Jméno:</label>
+        <input type="text" id="name" name="name" required>
+        <label class="checkbox-label">
+        <input type="checkbox" name="agree" required>
+            Согласен с обработкой персональных данных
+        </label>
+        <button type="submit">Odeslat</button>
+        <input type="text" placeholder="Имя"><br>
+  <input type="password" placeholder="Пароль"><br>
+  <input type="email" placeholder="Email"><br>
+  <input type="number" min="1" max="10"><br>
+  <input type="date"><br>
+  <input type="checkbox"> Я согласен<br>
+  <input type="radio" name="gender" value="male"> Мужчина
+  <input type="radio" name="gender" value="female"> Женщина<br>
+  <input type="file"><br>
+  <input type="color"><br>
+   <input type="range"><br> -->
+
+<!-- Делает жёстко фиксированный список вариантов.
+Пользователь может выбрать только один (или несколько, если стоит multiple) из того, что ты заранее прописал.
+Нельзя ввести своё значение. -->
+<!-- <label for="city">Выберите город:</label>
+<select id="city" name="city" multiple size="4">
+  <option value="prague">Прага</option>
+  <option value="brno">Брно</option>
+  <option value="ostrava">Острава</option>
+</select> -->
+
+<!-- Работает в паре с обычным <input>.
+Показывает подсказки (autocomplete), но пользователь может ввести любое своё значение.
+То есть список — это просто рекомендации, а не ограничения.
+<label for="city">Введите или выберите город:</label> -->
+<!-- <input list="cities" id="city" name="city">
+<datalist id="cities">
+  <option value="Прага">
+  <option value="Брно">
+  <option value="Острава">
+</datalist>
+</form> -->
+
+
+
+<!-- <form>
+        <fieldset>
+            <legend>Osobní údaje</legend>
+           
+            <label for="name">Jméno:</label>
+            <input type="text" id="name" name="name">
+           
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+        </fieldset>
+<form> -->
+<!-- <style>
+    input:enabled {
+    border: 2px solid green;
+  }
+    input:enabled {
+    border: 2px solid green;
+  }
+  input:disabled {
+    border: 2px solid gray;
+    background: #f0f0f0;
+  }
+  input:checked {
+    outline: 2px solid orange;
+  }
+  input:in-range {
+    background-color: #e0ffe0;
+  }
+ input:out-of-range {
+    background-color: #ffe0e0;
+  }
+  input:valid {
+    border-color: blue;
+  }
+  input:invalid {
+    border-color: red;
+  }
+</style> -->
+<!-- <label for="ageRange">Возраст:</label>
+<input type="range" id="ageRange" name="ageRange" min="18" max="99" value="30">
+
+<span id="rangeValue">30</span> -->
+<header>
+    <div class="logo">MyLogo</div>
+    <nav>
+      <ul class="list">
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">О нас</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+       <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <button id="openModal">Оставить заявку</button>
+  </main>
+
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-icon" id="closeModal">&times;</span> <!--Юникод -->
+      <h2>Оставьте заявку</h2>
+      <form id="requestForm">
+        <input type="text" placeholder="Ваше имя" required />
+        <input type="email" placeholder="Email" required />
+        <textarea rows="4" placeholder="Сообщение"></textarea>
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>

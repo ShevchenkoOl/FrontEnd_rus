@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex; /*Přidáno zobrazení vlastností: flex; na body tag použít flexbox.*/
+  flex-direction: column;
+}
+
+/* Разница между vh и %
+vh (viewport height)
+1vh = 1% от высоты окна браузера.
+Пример: height: 60vh → 60% от всей высоты экрана, не зависит от родителя.
+% (процент)
+60% означает 60% от высоты родителя элемента.
+Работает только если родитель имеет заданную высоту, иначе браузер не сможет посчитать. */
+
+.header,
+.footer {
+  height: 20vh;
+  width: 100%;
+  background-color: rgb(47, 254, 6);
+}
+
+.conteiner {
+  display: flex;
+  height: 60vh; 
+  width: 100vw;
+  /*flex: 1; Přidána vlastnost flex: 1; do kontejneru .container, takže zabírá veškerý dostupný vertikální prostor.*/
+}
+.main {
+  background-color: rgb(248, 238, 226);
+  width: 54vw;
+  /* flex: 1; */
+}
+.aside {
+    background-color: rgb(243, 209, 169);
+    width: 23vw;
+}
+.nav{
+    background-color: rgb(199, 228, 169);
+    width: 23vw;
+}

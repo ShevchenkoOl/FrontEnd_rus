@@ -1,0 +1,405 @@
+Методология — это система принципов, правил и подходов для решения определённых задач. В программировании методология помогает организовать работу, сделать код понятным и поддерживаемым.
+
+Самые популярные методологии CSS:
+OOCSS (Object-Oriented CSS) — разделение структуры и оформления
+SMACSS (Scalable and Modular Architecture for CSS) — категоризация стилей
+Atomic CSS — один класс = одно свойство
+CSS Modules — изоляция стилей через уникальные имена классов
+BEM (Block, Element, Modifier) — это методология для организации CSS-кода и HTML-разметки
+
+Мы с вами будем познакомимся с методологией BEM Блок, Элемент, Модификатор. Это методология была разработанная в Яндексе. Она помогает создавать переиспользуемые компоненты и делает код более структурированным. Это не только метод именования классов, но в первую очередь парадигма восприятия проекта как набора сущностей (блоки, элементы, модификаторы), которые можно смешивать и сопоставлять для создания интерфейсов, как конструктор LEGO. Она менее запутана, чем другие, и предоставляет хорошую архитектуру с узнаваемой терминологией.
+
+Основные понятия:
+1. Блок — независимый компонент страницы (например, кнопка, меню, форма), которуб можна будем использовать повторно в другую часть страницы или проекта, и он будет иметь смысл. Например, блоком может быть галерея, статья, шапка, форма, навигация и т.д.
+   .button { }
+   .menu { }
+2. Элемент — Составная часть блока, которая не имеет смысла и не может использоваться отдельно от него. Например, элемент меню, заголовок или текст в статье, изображение галереи и т. д.
+   .menu__item { }
+   .button__icon { }
+3. Модификатор — доаолнительный класс который изменяет внешний вид или поведение блока/элемента (обозначается двумя дефисами --)
+   .button--red { }
+   .menu__item--active { }
+
+
+1. Блок
+Имя класса блока:
+    - Может состоять только из латинских букв, цифр и тире.
+    - Должно отвечать на вопрос «Что это?» - widget, gallery, navigation, post.
+    - Не должно отвечать на вопрос «Как выглядит?» - red-text, round-button и т. п.
+
+Говоря простыми словами блок - это просто базовый класс компонента:
+    <a class="logo"></a>
+    <p class="alert"></p>
+    <ul class="gallery"></ul>
+    <article class="product"></article>
+    <section class="section"></section>
+    <header class="page-header"></header>
+
+Вложенность
+Блоки можно и нужно вкладывать друг в друга, ограничений нет, помимо здравого смысла и спецификации HTML, так как они представлены тегами. Никаких дополнительных особенностей, приоритета или иерархии вложенные блоки не имеют.
+<!-- Блок page-header -->
+<header class="page-header">
+  <!-- Вложенный блок logo -->
+  <a href="" class="logo"></a>
+
+  <!-- Вложенный блок navigation -->
+  <ul class="navigation">
+    ...
+  </ul>
+</header>
+
+2. Элемент
+Имя класса элемента:
+    - Обязательно формируется по схеме блок__элемент. Имя блока задаёт пространство имён, которое гарантирует зависимость его элементов.
+    - Должно отвечать на вопрос «Что это?», например блок__item, блок__title, блок__link, блок__image и т. п.
+    - Не должно отвечать на вопрос «Как выглядит?», например блок__big-link, блок__blue-text, блок__round-button и т. п.
+
+<!-- ✅ Блок logo с элементами image и label -->
+<a href="" class="logo">
+  <img class="logo__image" src="..." alt="Логотип компании Технокряк" />
+  <span class="logo__label">Компания Технокряк</span>
+</a>
+
+<!-- ❌ Элемент вне блока не имеет смысла -->
+<img class="logo__image" src="..." alt="Логотип компании Технокряк" />
+
+<!-- ✅ Блок product с элементами name, price и link -->
+<article class="product">
+  <h1 class="product__name">Холодильник</h1>
+  <p class="product__price">Цена: 30000</p>
+  <a class="product__link" href="">Посмотреть все характеристики</a>
+</article>
+
+<!-- ❌ Элемент вне блока не имеет смысла -->
+<h1 class="product__name">Холодильник</h1>
+
+Как отличить блок и элемент?
+Задайте себе вопрос: «Эта сущность может потребоваться мне отдельно, сама по себе? Или она нужна только внутри её родителя?». Если нужна отдельно - это блок, если мыслима только как часть - это элемент.
+
+Вложенность
+Элементы можно вкладывать друг в друга, при этом допустима любая вложенность, так как BEM-классы не привязаны к HTML-иерархии. HTML-структура элементов блока может быть произвольной.
+
+Навигация это блок, а элемент списка и ссылка это элементы блока навигации.
+<ul class="nav">
+  <li class="nav__item">
+    <a class="nav__link" href="">О нас</a>
+  </li>
+  <li class="nav__item">
+    <a class="nav__link" href="">Контакты</a>
+  </li>
+  <li class="nav__item">
+    <a class="nav__link" href="">Галерея</a>
+  </li>
+</ul>
+
+Структура BEM-классов такого компонента будет плоской.
+Что значит "плоская структура"?
+Плоская структура в БЭМ означает, что имена классов элементов не отражают вложенность в HTML. Независимо от того, насколько глубоко элемент находится в разметке, его класс всегда состоит только из имени блока и имени элемента.
+.nav
+.nav__item
+.nav__link
+
+Добавим BEM-классы к разметке карточки продукта с несколькими уровнями вложенности.
+<article class="product">
+  <div class="product__overlay">
+    <img class="product__image" src="" />
+  </div>
+
+  <div class="product__content">
+    <h2 class="product__name">Холодильник</h2>
+    <p class="product__description">Шикарный холодильник</p>
+    <a class="product__link" href="">Посмотреть все характеристики</a>
+
+    <div class="product__meta">
+      <p class="product__price">Цена: 30000</p>
+      <p class="product__quantity">Осталось: 8 штук</p>
+    </div>
+  </div>
+</article>
+
+Структура BEM-классов блока и его элементов всегда будет плоской, вне зависимости от глубины вложенности элементов друг в друга. Это позволяет изменять структуру HTML-разметки блока без внесения правок в стили.
+.product
+.product__overlay
+.product__image
+.product__content
+.product__name
+.product__description
+.product__link
+.product__meta
+.product__price
+.product__quantity
+
+Внимание
+Элемент - всегда часть блока, а не другого элемента. Это значит, что в имени класса элемента нельзя прописывать иерархию вида блок__элемент1__элемент2.
+
+Необязательность
+Элемент это необязательная часть блока. Не у всех блоков должны быть элементы и не все элементы могут присутствовать в разных экземплярах блока.
+<!-- Блок button c иконкой и текстом -->
+<button class="button" type="button">
+  <svg class="button__icon">...</svg>
+  <span class="button__label">В корзину</span>
+</button>
+
+<!-- Блок button только с текстом -->
+<button class="button" type="button">
+  <span class="button__label">В корзину</span>
+</button>
+
+<!-- Блок button только с иконкой -->
+<button class="button" type="button">
+  <svg class="button__icon">...</svg>
+</button>
+
+
+3. Модификатор
+Имя класса модификатора:
+    - Должно быть простым, описывающим вносимое изменение.
+    - Обязательно формируется по схеме блок--модификатор или блок__элемент--модификатор.
+    - Класс-модификатор никогда не должен использоваться самостоятельно, а только в паре с тем классом блока или элемента, который он дополняет. В примере, имена модификаторов указывают тип оповещения.
+
+<!-- ✅ Есть базовый класс -->
+<p class="alert"></p>
+
+<!-- ✅ Есть базовый класс и класс-модификатор -->
+<p class="alert alert--success"></p>
+<p class="alert alert--error"></p>
+<p class="alert alert--warning"></p>
+
+<!-- ❌ Нет базового класса, не имеет смысла -->
+<p class="alert--success"></p>
+
+Базовые стили блока или элемента записываются в их классе. Класс-мидификатор может добавлять новые или переопределять уже существующие свойства.
+
+Кнопка-конструктор
+Создадим компонент кнопки с иконкой и текстом. Кнопка это блок, иконка и текст - его необязательные элементы.
+<button class="button" type="button">
+  <svg class="button__icon">...</svg>
+  <span class="button__label">В корзину</span>
+</button>
+
+Для того чтобы задать отступ между иконкой и текстом, необходимо указать margin, например иконке.
+.button__icon {
+  margin-right: 10px;
+}
+
+Проблема такого решения в том, что элементы это необязательная часть блока и их HTML-структура может быть произвольной. Иконка может быть справа от текста, тогда у неё будет лишний правый отступ, а нужен левый. Текста может не быть вовсе, тогда и отступы не нужны.
+
+<!-- Иконка после текста -->
+<button class="button" type="button">
+  <span class="button__label">В корзину</span>
+  <svg class="button__icon">...</svg>
+</button>
+
+<!-- Текста нет -->
+<button class="button" type="button">
+  <svg class="button__icon">...</svg>
+</button>
+
+Решить эту задачу помогут модификаторы. Добавим иконке два модификатора положения - start и end (их так же можно было назвать например left и right). В этих классах-модификаторах запишем стили для отступов.
+
+.button__icon--start {
+  margin-right: 10px;
+}
+
+.button__icon--end {
+  margin-left: 10px;
+}
+
+Теперь мы можем комбинировать элементы кнопки как конструктор LEGO и ничего не будет лишним и не сломается. Всё потому что базовые классы блока и элементов содержат общие стили для всех их вариаций, а модификаторы изменяют стили по необходимости.
+
+Почему мы в принципи должены это учить или знать? Без методологии код быстро превращается в кашу: сложно понять, где какие стили применяются, а при изменениях можно случайно сломать другие части сайта.
+Методология помогает избежать конфликтов, сделать стили предсказуемыми и компонентами — переиспользуемыми.
+Задача1:
+<div>
+  <img src="user.jpg">
+  <h3>Иван Петров</h3>
+  <p>Frontend-разработчик</p>
+  <div>
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+  </div>
+</div>
+
+Решение:
+<div class="team-member">
+  <img src="user.jpg" alt="Иван Петров" class="team-member__photo">
+  <h3 class="team-member__name">Иван Петров</h3>
+  <p class="team-member__role">Frontend-разработчик</p>
+  <div class="team-member__socials">
+    <a href="#" class="team-member__social-link">LinkedIn</a>
+    <a href="#" class="team-member__social-link">GitHub</a>
+  </div>
+</div>
+
+Задача2:
+<div>
+  <h2>Подтвердите действие</h2>
+  <p>Вы уверены, что хотите удалить файл?</p>
+  <button>Да</button>
+  <button>Нет</button>
+</div>
+
+Решение:
+<div class="modal">
+  <h2 class="modal__title">Подтвердите действие</h2>
+  <p class="modal__text">Вы уверены, что хотите удалить файл?</p>
+  <div class="modal__actions">
+    <button class="modal__button modal__button--confirm">Да</button>
+    <button class="modal__button modal__button--cancel">Нет</button>
+  </div>
+</div>
+
+Задача3:
+Неправильно оформленный код
+<!-- Пример без методологии, как часто бывает на практике -->
+<div class="card-wrapper">
+  <div class="header">
+    <img class="icon" src="logo.png" alt="">
+    <h2 class="title">О компании</h2>
+  </div>
+
+  <div class="content-box">
+    <p class="text blue-text">Мы разрабатываем современные веб-приложения.</p>
+    <button class="btn red-btn">Подробнее</button>
+  </div>
+
+  <div class="footer">
+    <a href="#" class="link active-link">Наш сайт</a>
+  </div>
+</div>
+
+Решение:
+<article class="card">
+  <header class="card__header">
+    <img class="card__icon" src="logo.png" alt="Логотип компании">
+    <h2 class="card__title">О компании</h2>
+  </header>
+
+  <div class="card__content">
+    <p class="card__text">Мы разрабатываем современные веб-приложения.</p>
+    <button class="button button--primary">Подробнее</button>
+  </div>
+
+  <footer class="card__footer">
+    <a href="#" class="card__link card__link--active">Наш сайт</a>
+  </footer>
+</article>
+
+
+Задача4:
+<header class="">
+    <div class="">
+      <a href="#" class="">TechStore</a>
+
+      <nav class="">
+        <ul class="">
+          <li class=""><a href="#" class="">Главная</a></li>
+          <li class=""><a href="#" class="">Каталог</a></li>
+          <li class=""><a href="#" class="">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ====== PRODUCTS ====== -->
+  <section class="">
+    <article class="">
+      <img src="https://picsum.photos/300/200?1" alt="Ноутбук X100" class="">
+      <div class="">
+        <h3 class="">Ноутбук X100</h3>
+        <p class="">Мощный ноутбук для работы и игр</p>
+        <div class="">
+          <span class="">₽ 59 990</span>
+          <button class="">Купить</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="">
+      <img src="https://picsum.photos/300/200?2" alt="Смартфон Ultra" class="">
+      <div class="">
+        <h3 class="">Смартфон Ultra</h3>
+        <p class="">Высокое качество камеры и экран 120Hz</p>
+        <div class="">
+          <span class="">₽ 49 990</span>
+          <button class="">В корзину</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="">
+      <img src="https://picsum.photos/300/200?3" alt="Наушники SoundPro" class="">
+      <div class="">
+        <h3 class="">Наушники SoundPro</h3>
+        <p class="">Чистый звук и активное шумоподавление</p>
+        <div class="">
+          <span class="">₽ 14 990</span>
+          <button class="">Купить</button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="">
+    <p class="">© 2025 TechStore — Все права защищены</p>
+  </footer>
+
+Решение:
+<header class="page-header">
+    <div class="page-header__container">
+      <a href="#" class="logo">TechStore</a>
+
+      <nav class="navigation">
+        <ul class="navigation__list">
+          <li class="navigation__item"><a href="#" class="navigation__link navigation__link--active">Главная</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link">Каталог</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ====== PRODUCTS ====== -->
+  <section class="products">
+    <article class="product">
+      <img src="https://picsum.photos/300/200?1" alt="Ноутбук X100" class="product__image">
+      <div class="product__content">
+        <h3 class="product__title">Ноутбук X100</h3>
+        <p class="product__description">Мощный ноутбук для работы и игр</p>
+        <div class="product__meta">
+          <span class="product__price">₽ 59 990</span>
+          <button class="button button--primary">Купить</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="product">
+      <img src="https://picsum.photos/300/200?2" alt="Смартфон Ultra" class="product__image">
+      <div class="product__content">
+        <h3 class="product__title">Смартфон Ultra</h3>
+        <p class="product__description">Высокое качество камеры и экран 120Hz</p>
+        <div class="product__meta">
+          <span class="product__price">₽ 49 990</span>
+          <button class="button button--secondary">В корзину</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="product product--featured">
+      <img src="https://picsum.photos/300/200?3" alt="Наушники SoundPro" class="product__image">
+      <div class="product__content">
+        <h3 class="product__title">Наушники SoundPro</h3>
+        <p class="product__description">Чистый звук и активное шумоподавление</p>
+        <div class="product__meta">
+          <span class="product__price">₽ 14 990</span>
+          <button class="button button--primary">Купить</button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="page-footer">
+    <p class="page-footer__text">© 2025 TechStore — Все права защищены</p>
+  </footer>

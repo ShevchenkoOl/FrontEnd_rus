@@ -1,0 +1,82 @@
+<!-- Когда мы создаём веб-страницы, важно не только содержание, но и то, как элементы располагаются на экране. Иногда достаточно стандартного потока документа, когда элементы идут один за другим. Но чаще всего нам нужно управлять положением блоков: ставить меню в углу, фиксировать шапку при прокрутке, накладывать элементы друг на друга.
+Для этого в CSS есть свойство position, которое определяет, как браузер рассчитывает координаты элемента и относительно чего он его позиционирует.
+Основные значения position, которые нужно знать:
+static — стандартное, без позиционирования;
+relative — смещение относительно исходного места;
+absolute — абсолютное позиционирование внутри родителя;
+fixed — закрепление относительно окна браузера;
+sticky — "липкое" позиционирование (гибрид relative и fixed).
+
+1. static (по умолчанию)
+Это значение по умолчанию у всех элементов.
+Элемент располагается в общем потоке страницы (как идёт HTML — так и отображается).
+Координаты (top, left, right, bottom) не работают.
+Пример:
+
+div {
+  position: static; /* можно даже не указывать */
+} -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="lekce5.css">
+</head>
+<body>
+<section class="section">
+<section class="container">
+  <div class="container_foto">
+  <img class="img" src="zena1.jpg" alt="foto">
+  </div>
+  <h2 class="title">Jarmila Blondata</h2>
+  <p class="paragraph">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis voluptates, magni molestias rem quasi laboriosam debitis quaerat. Libero, dignissimos.</p>
+</section>
+<section class="container">
+  <div class="container_foto">
+  <img class="img" src="zena1.jpg" alt="foto">
+  </div>
+  <h2 class="title">Jarmila Blondata</h2>
+  <p class="paragraph">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis voluptates, magni molestias rem quasi laboriosam debitis quaerat. Libero, dignissimos.</p>
+</section>
+<section class="container">
+  <div class="container_foto">
+  <img class="img" src="zena1.jpg" alt="foto">
+  </div>
+  <h2 class="title">Jarmila Blondata</h2>
+  <p class="paragraph">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis voluptates, magni molestias rem quasi laboriosam debitis quaerat. Libero, dignissimos.</p>
+</section>
+<section class="container">
+  <div class="container_foto">
+  <img class="img" src="zena1.jpg" alt="foto">
+  </div>
+  <h2 class="title">Jarmila Blondata</h2>
+  <p class="paragraph">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis voluptates, magni molestias rem quasi laboriosam debitis quaerat. Libero, dignissimos.</p>
+</section>
+</section>
+    <!-- <div class="rel">Relative</div>
+    <div style="position: relative; border: 1px solid red; height:200px; overflow-y: scroll;">
+    <div class="abs">Absolute</div>
+    </div>
+    <div class="fix">Fixed</div> -->
+    <!-- <p style="font-size: 36px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, minus earum? Sequi, maxime molestias ullam nam culpa nesciunt quaerat pariatur neque suscipit quia optio. Vel sapiente beatae minus repellendus sit. Lorem ipsum dolor sit amet consectetur adipisicing elit. A culpa minima neque commodi itaque eius voluptatibus aliquam et inventore quos dolore error rem non, quia quidem facere porro quis cumque.</p> -->
+    <!-- sticky -->
+     <!-- <div class="container">
+    <div class="sticky">Я липкий header</div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item sticky2">Я второй липкий елемент</div>
+    <div class="item"></div>
+    <div class="item"></div>
+  </div> -->
+
+  <!-- <div style="width: 200px; border: 2px solid #333; overflow-x: auto; white-space: nowrap;">
+  <span style="display:inline-block; width: 300px; background: lightblue;">
+    Очень длинный текст или элемент, который не помещается в ширину контейнера
+  </span>
+</div> -->
+
+</body>
+</html>

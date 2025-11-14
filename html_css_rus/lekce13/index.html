@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tailwind 4 test</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+        @theme {
+            --color-brand: #4ade80;
+            --font-display: 'Poppins', sans-serif;
+            --spacing-72: 18rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-700 text-center flex items-center justify-center min-h-screen">
+  <h1 class="text-3xl font-bold text-blue-600 mt-10">
+    Tailwind 4 funguje! 🎉
+  </h1>
+
+  
+<!-- цвета -->
+ <!-- HEX -->
+<div class="bg-[#ff5733] w-24 h-24"></div>
+
+<!-- RGB -->
+<div class="bg-[rgb(120,220,100)] w-24 h-24"></div>
+
+<!-- HSL -->
+<div class="bg-[hsl(200,70%,50%)] w-24 h-24"></div>
+
+  <!-- пригубщий мяч -->
+  <div class="w-16 h-16 bg-blue-500 rounded-full animate-bounce"></div>
+<!-- эффект загрузки -->
+<div class="flex gap-3 mt-10">
+  <div class="w-4 h-4 bg-blue-500 rounded-full animate-ping"></div>
+  <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+  <div class="w-4 h-4 bg-red-500 rounded-full animate-spin"></div>
+</div>
+
+<button class="px-8 py-3 font-semibold text-white
+                 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500
+                 rounded-full shadow-lg
+                 transition-all duration-500
+                 hover:scale-110 hover:shadow-[0_0_25px_rgba(236,72,153,0.8)]
+                 focus:outline-none">
+    Klikni na mě
+</button>
+
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animovaná gradientní tlačítko 🌈</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradientFlow 5s ease infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+  <button class="relative px-10 py-4 text-lg font-semibold text-white
+                 rounded-full shadow-lg transition-all duration-500
+                 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
+                 animate-gradient hover:scale-110 hover:shadow-[0_0_30px_rgba(168,85,247,0.8)]
+                 focus:outline-none">
+    ✨ Magické tlačítko
+  </button>
+
+
+
+    <div class="bg-brand text-white font-display p-72 rounded-xl shadow-lg">
+  Přizpůsobený styl přes @theme 🎨
+</div>
+
+</body>
+</html>
+
+
+</body>
+</html>

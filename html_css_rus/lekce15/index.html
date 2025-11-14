@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Animations</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .intro {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .intro h1 {
+            font-size: 3rem;
+        }
+
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        /* ===========================
+           АНИМАЦИЯ 1: Появление снизу
+           =========================== */
+        
+        /* Определяем анимацию */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Применяем к элементу */
+        .box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            margin: 50px 0;
+            border-radius: 15px;
+            text-align: center;
+            
+            /* Привязываем анимацию к скроллу! */
+            animation: slideUp linear;
+            animation-timeline: view(); /* ⭐ МАГИЯ! */
+            animation-range: entry 0% cover 30%;
+        }
+
+        /* ===========================
+           АНИМАЦИЯ 2: Появление слева
+           =========================== */
+        
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .box-left {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            margin: 50px 0;
+            border-radius: 15px;
+            
+            animation: slideLeft linear;
+            animation-timeline: view();
+            animation-range: entry 0% cover 30%;
+        }
+
+        /* ===========================
+           АНИМАЦИЯ 3: Zoom эффект
+           =========================== */
+        
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .box-zoom {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            margin: 50px 0;
+            border-radius: 15px;
+            text-align: center;
+            
+            animation: zoomIn linear;
+            animation-timeline: view();
+            animation-range: entry 0% cover 40%;
+        }
+
+        /* ===========================
+           АНИМАЦИЯ 4: Вращение
+           =========================== */
+        
+        @keyframes rotate {
+            from {
+                opacity: 0;
+                transform: rotate(-180deg) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        .box-rotate {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 40px;
+            margin: 50px 0;
+            border-radius: 15px;
+            text-align: center;
+            
+            animation: rotate linear;
+            animation-timeline: view();
+            animation-range: entry 0% cover 40%;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .spacer {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro">
+        <div>
+            <h1>👇 Скролль вниз</h1>
+            <p>Анимации появятся при прокрутке!</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Scroll-driven Animations</h1>
+        <p>Элементы ниже будут анимироваться, когда ты до них доскроллишь. Всё работает на чистом CSS!</p>
+    </div>
+
+    <!-- Анимация 1: Снизу -->
+    <div class="box">
+        <h2>📦 Анимация 1</h2>
+        <p>Появляюсь снизу (slideUp)</p>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Анимация 2: Слева -->
+    <div class="box-left">
+        <h2>👈 Анимация 2</h2>
+        <p>Появляюсь слева (slideLeft)</p>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Анимация 3: Zoom -->
+    <div class="box-zoom">
+        <h2>🔍 Анимация 3</h2>
+        <p>Увеличиваюсь (zoomIn)</p>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Анимация 4: Вращение -->
+    <div class="box-rotate">
+        <h2>🌀 Анимация 4</h2>
+        <p>Вращаюсь и увеличиваюсь (rotate)</p>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="content">
+        <h2>Как это работает? 🤔</h2>
+        <ol style="line-height: 2;">
+            <li>Создаём обычную @keyframes анимацию</li>
+            <li>Применяем к элементу: <code>animation: имя_анимации linear;</code></li>
+            <li>Добавляем магию: <code>animation-timeline: view();</code></li>
+            <li>Готово! Элемент анимируется при скролле</li>
+        </ol>
+    </div>
+
+    <div class="spacer"></div>
+
+</body>
+</html>

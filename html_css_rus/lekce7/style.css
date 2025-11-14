@@ -1,0 +1,157 @@
+/* Давайте вспомним и повторим, что такое
+Flexbox - метод разроложение елементов на странице 
+Flexible Box Layout (Flexbox) - это CSS-модуль, который определяет набор свойств для размещения, выравнивания и распределения пространства между элементами в контейнере, даже если их размер неизвестен или динамичен.
+📌 Основная идея:
+Упрощает выравнивание, распределение пространства и адаптацию элементов в одном измерении. 
+Ключевые возможности Flexbox:
+ - Горизонтальное и вертикальное выравнивание без «хака» через margin или position.
+ - Автоматическое перераспределение места между элементами.
+ - Возможность изменять порядок элементов (order).
+ - Простое создание адаптивных строк/колонок.
+*/
+
+/* Что такое grid?
+grid (CSS Grid Layout) — это двумерная система компоновки.
+Она позволяет работать сразу в двух измерениях:
+по строкам и столбцам.
+
+📌 Основная идея:
+Ты заранее определяешь сетку (grid), а потом размещаешь элементы внутри ячеек, как на шахматной доске. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 колонки равной ширины */
+  grid-template-rows: 100px 100px;       /* 2 строки по 100px */
+  gap: 10px;
+}
+
+/* div{
+    border: 1px solid black;
+} */
+
+/* Ключевые возможности Grid:
+Создание сложных макетов (табличная структура, галереи, дашборды и т. д.).
+Полный контроль над размером и положением элементов.
+Возможность пересекать строки и столбцы (grid-column: span 2).
+Отлично подходит для вёрстки всей страницы или основных блоков макета. */
+/* 🧱 Основные свойства CSS Grid
+1. display: grid;
+Активирует грид-контейнер.
+Все дочерние элементы становятся grid items.*/
+
+.container {
+  display: grid;
+}
+
+/*2. grid-template-columns и grid-template-rows
+Задают количество и размер столбцов и строк.*/
+
+.container {
+  display: grid;
+  /* grid-template-columns: 200px 1fr 2fr; */
+  grid-template-columns: 100px auto 1fr 100px;
+  grid-template-rows: 100px 100px;      /* две строки */
+}
+/* fr — это единица измерения, означающая долю свободного пространства (fraction of free space). */
+.grid{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: repeat(5, 50px);
+  gap: 10px;
+  justify-content:end;
+  align-items: end;
+}
+
+.item{
+  background-color: aqua;
+}
+.container {
+  display: grid;
+  grid-template-columns: 150px 1fr 150px;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas:
+    "header header header"
+    "sidebar main aside";
+  gap: 10px;
+}
+
+.header  { grid-area: header; background: lightblue; }
+.sidebar { grid-area: sidebar; background: lightgreen; }
+.main    { grid-area: main; background: lightcoral; }
+.aside   { grid-area: aside; background: lightgoldenrodyellow; }
+
+.container {
+  display: grid;
+  grid-template: 
+    "header header" 50px
+    "sidebar main" 200px
+    "footer footer" 30px
+    / 100px 1fr;
+}
+/* Строки и их высота
+"header header" 50px → первая строка высотой 50px
+"sidebar main" 200px → вторая строка 200px
+"footer footer" 30px → третья строка 30px
+Колонки и их ширина
+/ 100px 1fr → первая колонка 100px, вторая занимает оставшееся место */
+
+.container {
+  display: grid;
+  /* grid-template-columns: 100px 200px; */
+   grid-auto-rows: 150px; /* каждая автоматически добавленная строка — 150px */
+}
+
+
+/* Layout 2*/
+/* .con {
+  display: grid;
+  grid-template-columns: 150px 1fr 200px;
+  grid-template-rows: 100px 1fr 100px;
+  grid-template-areas:
+    "nav header header"
+    "nav article aside"
+    "nav footer footer";
+  height: 100vh;
+}
+
+header  { grid-area: header; background: yellowgreen; }
+nav     { grid-area: nav; background: #d0e5d0; }
+article { grid-area: article; background: white; }
+aside   { grid-area: aside; background: #f8f5d0; }
+footer  { grid-area: footer; background: yellowgreen; }
+
+
+
+  .layout3 {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-areas:
+  "nav header"
+  "nav article"
+  "nav footer";
+  height: 100vh;
+}
+
+header  { grid-area: header; background: yellowgreen; }
+nav     { grid-area: nav; background: #d0e5d0; }
+article { grid-area: article; background: white; }
+footer  { grid-area: footer; background: yellowgreen; }
+
+
+
+.layout4 {
+  display: grid;
+  grid-template-columns: 150px 1fr 200px;
+  grid-template-rows: 100px 1fr 100px;
+  grid-template-areas:
+    "nav header header"
+    "nav article aside"
+    "nav footer aside";
+  height: 100vh;
+}
+
+header  { grid-area: header; background: yellowgreen; }
+nav     { grid-area: nav; background: #d0e5d0; }
+article { grid-area: article; background: white; }
+aside   { grid-area: aside; background: #f8f5d0; }
+footer  { grid-area: footer; background: yellowgreen; } */
