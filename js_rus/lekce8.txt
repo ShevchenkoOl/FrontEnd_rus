@@ -1,0 +1,502 @@
+1. DOM (Document Object Model, обьектная модель документа) — программный объект, который представляет HTML-документ как древовидную структуру узлов (nodes). Браузер строит DOM из HTML и позволяет JS читать и менять страницу:    
+        - создавать элементы,
+        - изменять текст,
+        - реагировать на события.
+
+Типы узлов (nodes)
+    - Element node — элементы (<div>, <p>, <input>).
+    - Text node — текст внутри элемента.
+    - Comment node — <!-- comment -->.
+    - Document — корневой объект (document).
+    - DocumentFragment — невставляемый в DOM контейнер для пакетных операций.
+
+Доступ к документу
+    document // корневой объект
+    window.document // то же самое
+
+Получение элементов — основные методы
+        getElementById(id) - Быстрый, возвращает один элемент или null.
+        const el = document.getElementById("main");
+
+        getElementsByClassName(name) - Возвращает живую HTMLCollection (обновляется при изменении DOM).
+        const cols = document.getElementsByClassName("item");
+
+        getElementsByTagName(tag) - Живая HTMLCollection по тегу.
+
+        querySelector(selector) - Возвращает первый элемент, поддерживает CSS-селекторы.
+        const first = document.querySelector(".list > li:first-child");
+
+        querySelectorAll(selector) - Возвращает массив.
+        const nodes = document.querySelectorAll(".card");
+
+Кроме жтого есть навигация по всему DOM с использованием навигационного свойства:
+elem.parentNode - выберет родительский elem.
+elem.childNodes - псевдомассив, хранит все дочерние элементы, включая текстовые.
+elem.children - псевдомассив, хранит только дочерние узлы-элементы, то есть те, что соответствуют тегам.
+elem.firstChild - выберет первый дочерний элемент внутри elem, включая текстовые узлы.
+elem.firstElementChild - выберет первый дочерний узел-элемент внутри elem.
+elem.lastChild - выберет последний дочерний элемент внутри elem, включая текстовые узлы.
+elem.lastElementChild - выберет последний дочерний узел-элемент внутри elem.
+elem.previousSibling - выберет элемент «слева» от elem (его предыдущего соседа).
+elem.previousElementSibling - выберет узел-элемент «слева» от elem (его предыдущего соседа).
+
+2. Свойства и атрибуты
+При построении DOM-дерева некоторые стандартные HTML-атрибуты становятся свойствами элементов. Рассмотрим несколько свойств, которые часто используются.
+
+value - содержит текущий текстовый контент элементов формы.
+checked - хранит состояние чекбокса или радиокнопки.
+name - хранит значение, указанное в HTML-атрибуте name.
+src - путь к изображению тега <img>.
+
+<img class="image" src="https://picsum.photos/id/9/320/240" alt="A laptop" width="300" />
+const image = document.querySelector(".image");
+console.log(image.src);  // https://picsum.photos/id/9/320/240
+
+2.1 Свойство textContent
+elem.textContent возвращает текстовое содержимое внутри элемента. Доступно для чтения и записи. Неважно, что будет передано в textContent, данные всегда будут записаны как текст.
+    <p class="article-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident quaerat nemo veritatis quasi eius eum aliquid, nobis dolore nisi, magnam eaque iusto, necessitatibus atque laborum quam tempora ducimus dicta ipsam.</p>
+
+    const textEl = document.querySelector(".article-text");
+    console.log(textEl.textContent);
+
+    можем также изменить:
+    textEl.textContent = "Hello"
+2.2 Свойство style
+        Используется для чтения и изменения инлайновых стилей. Возвращает объект CSSStyleDeclaration, который содержит список всех свойств, определенных только во встроенных стилях элемента, а не весь CSS. При записи свойства записываются в camelCase, то есть background-color преобразуется в element.style.backgroundColor и так далее.
+        javascriptconst button = document.querySelector(".btn");
+
+        button.style.backgroundColor = "teal";
+        button.style.fontSize = "24px";
+        button.style.textAlign = "center";
+
+        console.log(button.style); // объект инлайновых стилей
+
+2.3 Свойство classList
+    В свойстве classList хранится объект с методами для работы с классами элемента.
+        elem.classList.contains(cls) - возвращает true или false, в зависимости от наличия класса cls у элемента.
+        elem.classList.add(cls) - добавляет класс cls к списку классов элемента.
+        elem.classList.remove(cls) - удаляет класс cls из списка классов элемента.
+        elem.classList.toggle(cls) - если класс cls отсутствует, то добавляет его, если присутствует, наоборот - удаляет.
+        elem.classList.replace(oldClass, newClass) - заменяет существующий класс oldClass на указанный newClass.
+
+    Практический пример - переключение темной темы:
+        const themeButton = document.querySelector('.theme-toggle');
+        const body = document.body;
+
+        themeButton.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        
+        if (body.classList.contains('dark-theme')) {
+            themeButton.textContent = '☀️ Светлая тема';
+        } else {
+            themeButton.textContent = '🌙 Темная тема';
+        }
+        });
+
+    Пример - активная кнопка в меню:
+         <nav class="menu">
+            <button class="menu-btn active">Главная</button>
+            <button class="menu-btn">О нас</button>
+            <button class="menu-btn">Услуги</button>
+            <button class="menu-btn">Портфолио</button>
+            <button class="menu-btn">Контакты</button>
+        </nav>
+
+        const menuButtons = document.querySelectorAll('.menu-btn');
+
+        menuButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Убираем класс 'active' у всех кнопок
+            menuButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Добавляем класс 'active' только нажатой кнопке
+            button.classList.add('active');
+        });
+        });
+
+2.4 Атрибуты
+    DOM-элементам соответствуют HTML-теги, которые содержат текстовые атрибуты. Доступ к атрибутам осуществляется с помощью стандартных методов. Эти методы работают со значением, которое находится в HTML.
+
+    elem.hasAttribute(name) - проверяет наличие атрибута, возвращает true или false.
+    elem.getAttribute(name) - получает значение атрибута и возвращает его.
+    elem.setAttribute(name, value) - устанавливает атрибут.
+    elem.removeAttribute(name) - удаляет атрибут.
+    elem.attributes - свойство, возвращающее объект всех атрибутов элемента.
+
+    Примеры использования:
+    <img src="cat.jpg" alt="Кот" class="photo" data-id="123">
+    const img = document.querySelector('img');
+
+    // 1. Проверка наличия атрибута
+    console.log(img.hasAttribute('alt'));      // true
+    console.log(img.hasAttribute('title'));    // false
+
+    // 2. Получение значения атрибута
+    console.log(img.getAttribute('src'));      // "cat.jpg"
+    console.log(img.getAttribute('alt'));      // "Кот"
+    console.log(img.getAttribute('data-id'));  // "123"
+
+    // 3. Установка атрибута
+    img.setAttribute('title', 'Милый котик');
+    img.setAttribute('width', '300');
+    // Теперь: <img src="cat.jpg" alt="Кот" class="photo" data-id="123" title="Милый котик" width="300">
+
+    // 4. Удаление атрибута
+    img.removeAttribute('data-id');
+    // Теперь атрибута data-id нет
+
+    // 5. Получение всех атрибутов
+    console.log(img.attributes);
+    // Возвращает NamedNodeMap со всеми атрибутами
+
+    // Перебор всех атрибутов
+    for (let attr of img.attributes) {
+    console.log(`${attr.name} = ${attr.value}`);
+    }
+
+Пример - динамическое изменение ссылки:
+    <a href="#" id="link">Ссылка</a>
+
+    const link = document.getElementById('link');
+
+    // Проверяем и изменяем атрибут href
+    if (link.hasAttribute('href')) {
+    link.setAttribute('href', 'https://example.com');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+    }
+
+2.5 Создание элементов
+    const div = document.createElement('div');
+    const paragraph = document.createElement('p');
+    const button = document.createElement('button');
+
+    // Создание текстового узла
+    const textNode = document.createTextNode('Привет, мир!');
+
+2.6 Изменение элементов
+    const div = document.createElement('div');
+
+    // Добавление текста
+    div.textContent = 'Это текст внутри div';
+
+    // Добавление HTML
+    div.innerHTML = '<strong>Жирный текст</strong>';
+
+    // Добавление классов
+    div.classList.add('container', 'active');
+
+    // Установка атрибутов
+    div.setAttribute('id', 'main-div');
+    div.setAttribute('data-role', 'content');
+
+    // Добавление стилей
+    div.style.backgroundColor = 'lightblue';
+    div.style.padding = '20px';
+
+2.7 Добавление элементов в DOM-дерево
+    container = document.querySelector('.container');
+    const newElement = document.createElement('div');
+    newElement.textContent = 'Новый элемент';
+
+    // Метод 1: appendChild - добавляет в конец
+    container.appendChild(newElement);
+
+    // Метод 2: append - может добавлять несколько элементов и текст
+    const p1 = document.createElement('p');
+    const p2 = document.createElement('p');
+    container.append(p1, p2, 'Просто текст');
+
+    // Метод 3: prepend - добавляет в начало
+    container.prepend(newElement);
+
+    // Метод 4: insertBefore - вставляет перед указанным элементом
+    const referenceElement = container.firstElementChild;
+    container.insertBefore(newElement, referenceElement);
+
+    // Метод 5: before - вставляет перед элементом (снаружи)
+    referenceElement.before(newElement);
+
+    // Метод 6: after - вставляет после элемента (снаружи)
+    referenceElement.after(newElement);
+
+    // Метод 7: insertAdjacentHTML - вставляет HTML-строку
+    container.insertAdjacentHTML('beforebegin', '<p>Перед контейнером</p>');
+    container.insertAdjacentHTML('afterbegin', '<p>В начало контейнера</p>');
+    container.insertAdjacentHTML('beforeend', '<p>В конец контейнера</p>');
+    container.insertAdjacentHTML('afterend', '<p>После контейнера</p>');
+
+Схема позиций для insertAdjacentHTML
+    <!-- beforebegin -->
+        <div class="container">
+    <!-- afterbegin -->
+        содержимое
+    <!-- beforeend -->
+        </div>
+    <!-- afterend -->
+
+
+2.8 Удаление элементов
+    const element = document.querySelector('.remove-me');
+
+    // Метод 1: remove() - удаляет сам элемент
+    element.remove();
+
+    // Метод 2: removeChild() - удаляет дочерний элемент
+    const parent = document.querySelector('.parent');
+    const child = parent.querySelector('.child');
+    parent.removeChild(child);
+
+    // Удаление всех дочерних элементов
+    parent.innerHTML = '';
+    // или
+    while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+    }
+
+2.9 Замена элементов
+    const oldElement = document.querySelector('.old');
+    const newElement = document.createElement('div');
+    newElement.textContent = 'Новый элемент';
+
+    // Метод 1: replaceChild()
+    oldElement.parentNode.replaceChild(newElement, oldElement);
+
+    // Метод 2: replaceWith()
+    oldElement.replaceWith(newElement);
+
+
+Задание 1: Создать структуру. Создай через JavaScript следующую структуру и добавь в body:
+        <div class="container">
+        <h1>Заголовок</h1>
+        <p>Это параграф</p>
+        <button>Кнопка</button>
+        </div>
+        
+        // Создаем элементы
+        const container = document.createElement('div');
+        const h1 = document.createElement('h1');
+        const p = document.createElement('p');
+        const button = document.createElement('button');
+
+        // Добавляем классы и текст
+        container.className = 'container';
+        h1.textContent = 'Заголовок';
+        p.textContent = 'Это параграф';
+        button.textContent = 'Кнопка';
+
+        // Собираем структуру
+        container.appendChild(h1);
+        container.appendChild(p);
+        container.appendChild(button);
+
+        // Добавляем в body
+        document.body.appendChild(container);
+
+Задание 2: Изменить существующие элементы
+        <div id="box" class="old">Старый текст</div>
+        Измени через JavaScript:
+        Текст на "Новый текст"
+        Класс на "new"
+        Добавь атрибут data-status="active"
+        Измени цвет фона на "lightblue"
+
+        const box = document.getElementById('box');
+        box.textContent = 'Новый текст';
+        box.className = 'new';
+        box.setAttribute('data-status', 'active');
+        box.style.backgroundColor = 'lightblue';
+
+Задание 3: Создать список
+        Создай через JavaScript ul с 5 элементами li (текст: "Элемент 1", "Элемент 2" и т.д.)
+
+        const ul = document.createElement('ul');
+        for (let i = 1; i <= 5; i++) {
+        const li = document.createElement('li');
+        li.textContent = `Элемент ${i}`;
+        ul.appendChild(li);
+        }
+
+        document.body.appendChild(ul);
+
+Задание 4: Добавить элементы в разные позиции
+
+        <div id="container">
+        <p id="middle">Середина</p>
+        </div>
+        Добавь через JavaScript:  
+            - Параграф "Начало" в начало container (перед middle)
+            - Параграф "Конец" в конец container (после middle)
+            - Заголовок h2 "Перед контейнером" перед самим container
+            - Заголовок h2 "После контейнера" после самого container
+
+     
+        const container = document.getElementById('container');
+        const middle = document.getElementById('middle');
+
+        // В начало container
+        const pStart = document.createElement('p');
+        pStart.textContent = 'Начало';
+        container.prepend(pStart);
+
+        // В конец container
+        const pEnd = document.createElement('p');
+        pEnd.textContent = 'Конец';
+        container.append(pEnd);
+
+        // Перед container
+        const h2Before = document.createElement('h2');
+        h2Before.textContent = 'Перед контейнером';
+        container.before(h2Before);
+
+        // После container
+        const h2After = document.createElement('h2');
+        h2After.textContent = 'После контейнера';
+        container.after(h2After);
+
+Задание 5: Удаление элементов
+        <ul id="list">
+        <li>Элемент 1</li>
+        <li class="remove-me">Элемент 2</li>
+        <li>Элемент 3</li>
+        <li class="remove-me">Элемент 4</li>
+        <li>Элемент 5</li>
+        </ul>
+
+    Удали через JavaScript:
+       - Все элементы с классом "remove-me"
+       - Первый элемент списка
+
+        // Удаляем все элементы с классом remove-me
+        const removeElements = document.querySelectorAll('.remove-me');
+        removeElements.forEach(el => el.remove());
+
+        // Удаляем первый элемент списка
+        const list = document.getElementById('list');
+        list.firstElementChild.remove();
+
+Задание 6: Замена элемента
+
+    <p id="old">Старый параграф</p>
+    Замени его через JavaScript на:
+    html<div class="new">Новый div</div>
+
+  
+    const oldElement = document.getElementById('old');
+    const newElement = document.createElement('div');
+    newElement.className = 'new';
+    newElement.textContent = 'Новый div';
+    oldElement.replaceWith(newElement);
+
+Задание 7: Создать таблицу
+        Создай через JavaScript таблицу 3x3:
+        <table>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+        </tr>
+        </table>
+
+        const table = document.createElement('table');
+        let counter = 1;
+        for (let i = 0; i < 3; i++) {
+            const tr = document.createElement('tr');
+                for (let j = 0; j < 3; j++) {
+                    const td = document.createElement('td');
+                    td.textContent = counter;
+                    counter++;
+                    tr.appendChild(td);
+                }
+            table.appendChild(tr);
+        }
+
+        document.body.appendChild(table);
+
+Задание 9: Работа с классами
+        <div id="box" class="red large">Box</div>
+        Через JavaScript:
+
+        Добавь класс "active"
+        Удали класс "large"
+        Переключи класс "red" (если есть - удали, если нет - добавь)
+        Замени класс "active" на "inactive"
+
+        const box = document.getElementById('box');
+        box.classList.add('active');
+        box.classList.remove('large');
+        box.classList.toggle('red');
+        box.classList.replace('active', 'inactive');
+
+Задание 10: Создать карточки товаров
+Создай через JavaScript 3 карточки товаров со следующей структурой:
+<div class="product">
+  <img src="product1.jpg" alt="Товар 1">
+  <h3>Товар 1</h3>
+  <p class="price">1000 крон</p>
+</div>
+
+Данные товаров:
+Товар 1, product1.jpg, 1000 крон
+Товар 2, product2.jpg, 2000 крон
+Товар 3, product3.jpg, 3000 крон
+
+
+const products = [
+  { name: 'Товар 1', img: 'product1.jpg', price: 1000 },
+  { name: 'Товар 2', img: 'product2.jpg', price: 2000 },
+  { name: 'Товар 3', img: 'product3.jpg', price: 3000 }
+];
+
+products.forEach(product => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        const img = document.createElement('img');
+        img.src = product.img;
+        img.alt = product.name;
+        const h3 = document.createElement('h3');
+        h3.textContent = product.name;
+        const p = document.createElement('p');
+        p.className = 'price';
+        p.textContent = ${product.price} руб;
+        div.appendChild(img);
+        div.appendChild(h3);
+        div.appendChild(p);
+        document.body.appendChild(div);
+}
+);
+
+
+Задание 11: Навигация по DOM
+    <div id="parent">
+    <div class="child">Первый</div>
+    <div class="child">Второй</div>
+    <div class="child">Третий</div>
+    </div>
+    Через JavaScript:
+        - Получи второй дочерний элемент и измени его текст на "ВТОРОЙ"
+        - Получи последний дочерний элемент и добавь ему класс "last"
+        - Получи первый дочерний элемент и добавь перед ним новый div с текстом "Нулевой"
+
+    const parent = document.getElementById('parent');
+
+    // Второй дочерний элемент
+    parent.children[1].textContent = 'ВТОРОЙ';
+
+    // Последний дочерний элемент
+    parent.lastElementChild.classList.add('last');
+
+    // Добавить перед первым
+    const newDiv = document.createElement('div');
+    newDiv.textContent = 'Нулевой';
+    parent.firstElementChild.before(newDiv);

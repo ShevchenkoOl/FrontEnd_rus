@@ -1,10 +1,15 @@
-while (true) {
-    number = Number(prompt("Введите число от 1 до 5:"));
-    
-    if (number >= 1 && number <= 5) {
-        console.log("✅ Спасибо! Вы ввели: " + number);
-        break;
-    } else {
-        console.log("❌ Ошибка! Число должно быть от 1 до 5. Попробуйте ещё раз.");
-    }
-}
+// document.addEventListener("contextmenu", (event) => {
+//   event.preventDefault(); // отключаем меню браузера
+// });
+
+// document.addEventListener("mousedown", (event) => {
+//   console.log(event.button);
+// })
+
+
+const user = { name: "Alex", age: 26 };
+const str = JSON.stringify(user); // '{"name":"Alex","age":26}'
+console.log(str);
+// JSON → JS (для использования)
+const parsed = JSON.parse(str); // { name: "Alex", age: 26 }
+console.log(parsed);
