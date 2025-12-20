@@ -6,9 +6,47 @@
     <title>Document</title>
 </head>
 <body>
+<!-- <button id="load">Load user</button> -->
+ <style>
 
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-</script>
-    <!-- <script src="script.js"></script> -->
+    #spinner {
+      margin: 20px 0;
+      display: none;
+      font-weight: bold;
+    }
+
+    .characters {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .card img {
+      max-height: 150px;
+      object-fit: contain;
+    }
+  </style>
+
+  <h1>Simpsons characters</h1>
+
+  <button id="loadBtn">Load characters</button>
+
+  <div id="spinner">Loading...</div>
+
+  <div class="characters" id="characters"></div>
+    <script src="script.js"></script>
 </body>
 </html>
