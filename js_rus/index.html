@@ -38,6 +38,92 @@
       max-height: 150px;
       object-fit: contain;
     }
+.pagination {
+    display: none;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffcc00;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+#observer{
+  height: 1px;
+}
+
+  body {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    background-color: #f9f9f9;
+  }
+
+  h1 {
+    text-align: center;
+    color: #444;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  button {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  button:hover {
+    background-color: #1565c0;
+  }
+
+  hr {
+    margin: 20px 0;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  li button {
+    background-color: #e53935;
+    margin-top: 8px;
+  }
+
+  li button:hover {
+    background-color: #c62828;
+  }
+
+
   </style>
 
   <h1>Simpsons characters</h1>
@@ -47,6 +133,23 @@
   <div id="spinner">Loading...</div>
 
   <div class="characters" id="characters"></div>
+  <!-- Для пагинации -->
+  <div class="pagination">
+    <button id="prevBtn" disabled>← Prev</button>
+    <span id="span"></span>
+    <button id="nextBtn">Next →</button>
+</div>
+<div id="observer"></div>
+
+<h1>Moje sociální síť</h1>
+  <input type="text" id="author" placeholder="Jméno">
+  <textarea id="content" placeholder="Napiš něco..."></textarea>
+  <button id="submitPost">Přidat příspěvek</button>
+  <hr>
+  <ul id="postList"></ul>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

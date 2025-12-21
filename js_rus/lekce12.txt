@@ -1,144 +1,84 @@
-// // document.addEventListener("contextmenu", (event) => {
-// //   event.preventDefault(); // отключаем меню браузера
-// // });
+Создание собственного API
+Зачем создавать собственное API?
+    - Чтобы понять, как работает «backend» приложений.
+    - В реальных приложениях фронтенд взаимодействует с сервером через API. Создавая собственное API, мы можем на практике понять, как это работает.
+    - Для тренировки операций CRUD с реальными HTTP-запросами.
 
-// // document.addEventListener("mousedown", (event) => {
-// //   console.log(event.button);
-// // })
+Работа с API означает использование методов GET, POST, PATCH, DELETE — это важно уметь.
 
-// const loadBtn = document.getElementById("loadBtn");
-// const spinner = document.getElementById("spinner");
-// const charactersContainer = document.getElementById("characters");
-// const API_URL = "https://thesimpsonsapi.com/api/characters";
+Для разработки и тестирования проектов без необходимости реального бэкенда.
+Можно создать полноценное приложение даже без собственного сервера, потому что собственное API выполняет роль его замены.
 
-// // Пагинация
-// // const pagination = document.querySelector(".pagination");
-// // const prevBtn = document.querySelector("#prevBtn");
-// // const nextBtn = document.querySelector("#nextBtn");
-// // let currentPage = 1;
-// // const limit = 20; // сколько персонажей на странице
+Для отладки пользовательского интерфейса перед подключением реального API.
+Можно тестировать фронтенд без зависимости от бэкенда.
 
+Некоторые инструменты (например, Apidroid) позволяют сделать API доступным онлайн.
 
-// // infinite scroll
-// let currentPage = 1;
-// let isLoading = false;
-// const PAGE_SIZE = 20;
-// let observerStarted = false;
+Собственное API (например, с помощью json-server или Apidroid) — это имитация серверной части.
+Помогает тренировать работу с данными как в реальном приложении, даже если настоящего сервера нет.
+
+json-server
+
+🟩 Шаг 1 — Установка json-server
+В терминале (PowerShell, Terminal, VS Code):
+
+npm install -g json-server
+json-server --version
 
 
-// function showSpinner() {
-//   spinner.style.display = "block";
-// }
+🟩 Шаг 2 — Создаем файл db.json в корне проекта
+Пример db.json:
 
-// function hideSpinner() {
-//   spinner.style.display = "none";
-// }
+{
+  "contacts": [
+    { "id": 1, "name": "Анна Новакова", "phone": "123456789" },
+    { "id": 2, "name": "Петр Свобода", "phone": "987654321" }
+  ]
+}
 
-// function renderCharacters(characters) {
-//   // charactersContainer.innerHTML = ""; // Для infinite scroll оцичать контейнер не нужно
+🟩 Шаг 3 — Запуск сервера
+json-server --watch db.json --port 3001
+или
+npx json-server --watch db.json --port 3001
+Теперь API доступно по адресу: http://localhost:3001/contacts.
 
-//   characters.forEach(character => {
-//     const card = document.createElement("div");
-//     card.className = "card";
+Разница между npm и npx
+npm (Node Package Manager) используется для установки пакетов в проект или глобально.
+npm install json-server
 
-//     card.innerHTML = `
-//       <img src="https://thesimpsonsapi.com/api${character.portrait_path}" onerror="this.src='sim.jpg'" alt="${character.name}">
-//       <h3>${character.name}</h3>
-//       <p>${character.description || "No description"}</p>
-//     `;
+npx (Node Package Execute) используется для запуска пакета без установки.
+npx apidroid@latest
 
-//     charactersContainer.appendChild(card);
-//   });
+В базовом курсе CRUD обычно рассматривают только через HTTP-запросы, чтобы понять, как фронтенд и сервер обмениваются данными.
+CRUD — это четыре базовые операции с данными:
+    - C (Create) → создание нового объекта через POST-запрос к серверу
+    - R (Read) → получение данных через GET-запрос
+    - U (Update) → обновление существующего объекта через PUT или PATCH-запрос
+    - D (Delete) → удаление объекта через DELETE-запрос
 
-//   // после загрузки показываем кнопки для пагинации
-//   // pagination.style.display = "flex";
+На этом этапе не углубляются в внутреннюю работу баз данных. Главное — научиться:
+    - Отправлять запросы из фронтенда.
+    - Получать данные с сервера.
+    - Создавать, обновлять и удалять элементы через API.
+То есть, в базовом курсе CRUD сильно привязан к работе с HTTP-запросами.
 
-// }
-// // Для пагинации с параметром номера страницы по умолчанию
-// //async function loadCharacters(page = 1) {
+Библиотека axios:
+    - В axios ответ уже автоматически преобразуется в объект JavaScript (json):
+            const res = await axios.get("/api/data");
+            const data = res.data; // готовый объект
+    - axios поддерживает больше окружений «из коробки», включая Node.js.
+    - В fetch ошибки 400 или 500, не считаются ошибкой. В axios любой HTTP-ответ с кодом ошибки автоматически попадает в catch.
+    - axios всегда работал и в браузере, и в Node.js без дополнительных настроек, fetch только недавно появился в Node.js.
 
-// async function loadCharacters(){
-// // infinite scroll
-//    if (isLoading) return;
-//    isLoading = true;
+  
+  <h1>Moje sociální síť</h1>
+  <input type="text" id="author" placeholder="Jméno">
+  <textarea id="content" placeholder="Napiš něco..."></textarea>
+  <button id="submitPost">Přidat příspěvek</button>
+  <hr>
+  <ul id="postList"></ul>
 
-//   showSpinner();
-
-//   try {
-//     // const response = await fetch(`${API_URL}?page=${page}&limit=${limit}`); // для пагинации
-//     const response = await fetch(`${API_URL}?page=${currentPage}`); // для бесконечеого скролинга
-
-//     console.log(response);
-//     if (!response.ok) {
-//       throw new Error("Server error: " + response.status);
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//     renderCharacters(data.results);
-
-//     // // управление кнопками пагинации
-//     // prevBtn.disabled = page === 1;
-//     // nextBtn.disabled = data.results.length < limit;
-
-//     // infinite scroll если пришло меньше 20 — страниц больше нет
-//       if (data.results.length < PAGE_SIZE) {
-//           loadBtn.disabled = true;
-//           loadBtn.textContent = "Больше персонажей нет";
-//         }
-//         currentPage++;
-
-//   } catch (error) {
-//     console.error("Error:", error.message);
-//     alert("Failed to load characters");
-//   // } finally {
-//   //   hideSpinner();
-//   // }
-
-//   // Для infinite scroll
-//   } finally {
-//   isLoading = false; // ✅ ОБЯЗАТЕЛЬНО
-//   hideSpinner();
-// }
-// }
-
-// // слушатель события на кнопки пагинации
-// // loadBtn.addEventListener("click", loadCharacters);
-// // prevBtn.addEventListener("click", () => {
-// //     if (currentPage > 1) {
-// //         currentPage--;
-// //         loadCharacters(currentPage);
-// //     }
-// // });
-
-// // nextBtn.addEventListener("click", () => {
-// //     currentPage++;
-// //     loadCharacters(currentPage);
-// // });
-
-// // IntersectionObserver для скролла
-// const observerTarget = document.getElementById("observer");
-// const observer = new IntersectionObserver(entries => {
-//   if (entries[0].isIntersecting) {
-//     loadCharacters();
-//   }
-// }, {
-//   rootMargin: "100px"
-// });
-
-// // кнопка запускает первую загрузку + активирует observer
-// loadBtn.addEventListener("click", () => {
-//   loadCharacters();
-//   if (!observerStarted) {
-//     observer.observe(observerTarget);
-//     observerStarted = true;
-//   }
-// });
-
-// // observer.observe(element);     // начать наблюдение
-// // observer.unobserve(element);  // перестать наблюдать за одним элементом
-// // observer.disconnect();        // перестать наблюдать за всеми
-
+Основные операции с постами (CRUD) с помощью JavaScript и Axios
 // Получаем HTML-элемент списка постов по id
 const postList = document.getElementById("postList");
 
@@ -265,6 +205,7 @@ submitBtn.addEventListener("click", async () => {
 
             // POST-запрос — создание нового поста
             await axios.post("http://localhost:3001/posts", {
+                id: Date.now(),   // в данном примере ID создаёться автоматически с помощью сервера json-server, но для будущего лучше создавать  самому
                 author: author,
                 content: content,
                 likes: 0 // начальное количество лайков
@@ -342,3 +283,15 @@ function openEditForm(post) {
     // Сохраняем id редактируемого поста
     editPostId = post.id;
 }
+
+Таким образом, на этом примере мы разобрали работу всех основных HTTP-методов в собственной мини-социальной сети:
+
+GET — чтение данных,
+
+POST — создание нового поста,
+
+DELETE — удаление поста,
+
+PATCH — частичное обновление данных (например, лайки),
+
+PUT — полное обновление данных.

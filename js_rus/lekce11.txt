@@ -362,6 +362,8 @@ const hendleClick = () => {
  - показывать спиннер
  - рендерить карточки
  - обрабатывать ошибки
+ - пагиннация
+ - бесконечный скролинг или infinite scroll. 
 При решении этой задачи, мы будем использовать современную структуру async / await — это удобный способ работать с асинхронным кодом в JavaScript так, как будто он синхронный.
 без использование .then() и .catch()
 вот такая структура: 
@@ -379,10 +381,22 @@ async function loadUsers() {
   }
 }
 
+Для скролинга - IntersectionObserver (Наблюдатель пересечений) — это JavaScript API, который позволяет асинхронно отслеживать, когда целевой элемент пересекает область видимости браузера (viewport) или другого корневого элемента, вызывая заданную функцию обратного вызова (callback) при изменении степени пересечения.
+
 <h1>Simpsons characters</h1>
 <button id="loadBtn">Load characters</button>
 <div id="spinner">Loading...</div>
 <div class="characters" id="characters"></div>
+
+ <!-- Для пагинации -->
+  <div class="pagination">
+    <button id="prevBtn" disabled>← Prev</button>
+    <span id="span"></span>
+    <button id="nextBtn">Next →</button>
+</div>
+
+// Для infinite scroll в самом низу кода перед подключением к скриптам
+<div id="observer"></div>
 
 button {
       padding: 10px 16px;
@@ -414,11 +428,51 @@ button {
       object-fit: contain;
     }
 
+// для пагинации
+.pagination {
+    display: none;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.pagination button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffcc00;
+    font-weight: 600;
+    cursor: pointer;
+}
+.pagination button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+// Для infinite scroll
+#observer {
+    height: 1px;
+}
+
+
 const loadBtn = document.getElementById("loadBtn");
 const spinner = document.getElementById("spinner");
 const charactersContainer = document.getElementById("characters");
-
 const API_URL = "https://thesimpsonsapi.com/api/characters";
+
+// Пагинация
+// const pagination = document.querySelector(".pagination");
+// const prevBtn = document.querySelector("#prevBtn");
+// const nextBtn = document.querySelector("#nextBtn");
+// let currentPage = 1;
+// const limit = 20; // сколько персонажей на странице
+
+
+// infinite scroll
+let currentPage = 1;
+let isLoading = false;
+const PAGE_SIZE = 20;
+let observerStarted = false;
+
 
 function showSpinner() {
   spinner.style.display = "block";
@@ -429,41 +483,106 @@ function hideSpinner() {
 }
 
 function renderCharacters(characters) {
-  charactersContainer.innerHTML = "";
+  // charactersContainer.innerHTML = ""; // Для infinite scroll оцичать контейнер не нужно
 
   characters.forEach(character => {
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <img src="${character.image}" alt="${character.name}">
+      <img src="https://thesimpsonsapi.com/api${character.portrait_path}" onerror="this.src='sim.jpg'" alt="${character.name}">
       <h3>${character.name}</h3>
       <p>${character.description || "No description"}</p>
     `;
 
     charactersContainer.appendChild(card);
   });
-}
 
-async function loadCharacters() {
+  // после загрузки показываем кнопки для пагинации
+  // pagination.style.display = "flex";
+
+}
+// Для пагинации с параметром номера страницы по умолчанию
+//async function loadCharacters(page = 1) {
+
+async function loadCharacters(){
+// infinite scroll
+   if (isLoading) return;
+   isLoading = true;
+
   showSpinner();
 
   try {
-    const response = await fetch(API_URL); // HTTP-запрос к серверу, когда сервер ответил response - это не данные, а методанные которые включают всебя status, ok, header 
+    // const response = await fetch(`${API_URL}?page=${page}&limit=${limit}`); // для пагинации
+    const response = await fetch(`${API_URL}?page=${currentPage}`); // для бесконечеого скролинга
 
+    console.log(response);
     if (!response.ok) {
       throw new Error("Server error: " + response.status);
     }
 
-    const data = await response.json(); // читаем ответ от сервера и парсим его в json, после await data уже становиться обычным обьектом
+    const data = await response.json();
+    console.log(data)
     renderCharacters(data.results);
+
+    // // управление кнопками пагинации
+    // prevBtn.disabled = page === 1;
+    // nextBtn.disabled = data.results.length < limit;
+
+    // infinite scroll если пришло меньше 20 — страниц больше нет
+      if (data.results.length < PAGE_SIZE) {
+          loadBtn.disabled = true;
+          loadBtn.textContent = "Больше персонажей нет";
+        }
+        currentPage++;
 
   } catch (error) {
     console.error("Error:", error.message);
     alert("Failed to load characters");
+  // } finally {
+  //   hideSpinner();
+  // }
+
+  // Для infinite scroll
   } finally {
-    hideSpinner();
-  }
+  isLoading = false; // ✅ ОБЯЗАТЕЛЬНО
+  hideSpinner();
+}
 }
 
-loadBtn.addEventListener("click", loadCharacters);
+// слушатель события на кнопки пагинации
+// loadBtn.addEventListener("click", loadCharacters);
+// prevBtn.addEventListener("click", () => {
+//     if (currentPage > 1) {
+//         currentPage--;
+//         loadCharacters(currentPage);
+//     }
+// });
+
+// nextBtn.addEventListener("click", () => {
+//     currentPage++;
+//     loadCharacters(currentPage);
+// });
+
+// IntersectionObserver для скролла
+const observerTarget = document.getElementById("observer");
+const observer = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    loadCharacters();
+  }
+}, {
+  rootMargin: "100px"
+});
+
+// кнопка запускает первую загрузку + активирует observer
+loadBtn.addEventListener("click", () => {
+  loadCharacters();
+  if (!observerStarted) {
+    observer.observe(observerTarget);
+    observerStarted = true;
+  }
+});
+
+// observer.observe(element);     // начать наблюдение
+// observer.unobserve(element);  // перестать наблюдать за одним элементом
+// observer.disconnect();        // перестать наблюдать за всеми
