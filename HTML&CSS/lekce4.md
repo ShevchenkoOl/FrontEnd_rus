@@ -8,5 +8,5 @@
 
 ### 🗺 Навигация:
 
-[⬅ Лекция 3: <button>](./lekce3.md) | [🏠 В оглавление](../README.md) | [Лекция 5: FlexBox ➡](./lekce5.md)
+[⬅ Лекция 3: <button>](./lekce3.md) | [🏠 В оглавление](./README.md) | [Лекция 5: FlexBox ➡](./lekce5.md)
 ---
