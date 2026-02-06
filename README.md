@@ -15,6 +15,6 @@
 ---
 
 ## 👨‍🏫 Автор курса
-Этот проект создал и поддерживает **Олексии Шевченко**.
+Этот проект создал и поддерживает **Олексий Шевченко**.
 - **LinkedIn**: [Oleksii Shevchenko](https://linkedin.com/in/oleksii-shevchenko-535ab61b8)
 - **Email**: [uzlabini@gmail.com](mailto:uzlabini@gmail.com)
