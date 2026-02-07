@@ -246,6 +246,14 @@ h2 {
 * **Стилизовать скроллбар:** Делать скучные полосы прокрутки частью уникального дизайна.
 
 ---
+### 📚 Полезный ресурс для закрепления:
+
+* [MDN: Позиционирование](https://developer.mozilla.org/ru/docs/Learn_web_development/Core/CSS_layout/Positioning) — основы позиционирования руководство;
+---
+
+### 📝 Практическое задание:
+* [Позиционирование котиков (GitHub)](https://github.com/ShevchenkoOl/HW_HTML_positioning.git) — отработка навыков `position` и `z-index`.
+---
 
 ### 🗺 Навигация:
 
