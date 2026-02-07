@@ -20,19 +20,20 @@
 
 Списки помогают структурировать связанные элементы (меню, ингредиенты, шаги).
 
-### 2.1 Неупорядоченный список (`<ul>`)
+### 2.1 Неупорядоченный список (`<ul>`- аббревиатура от Unordered List)
 
 Используется, когда порядок не важен. Элементы отмечаются маркерами (точками).
 
 ```html
 <ul>
-    <li>Мука</li> <li>Сахар</li>
+    <li>Мука</li> /* List Item */
+    <li>Сахар</li>
     <li>Яйца</li>
 </ul>
 
 ```
 
-### 2.2 Упорядоченный список (`<ol>`)
+### 2.2 Упорядоченный список (`<ol>` - аббревиатура от Ordered List)
 
 Используется, когда важна последовательность (рецепты, инструкции).
 
@@ -49,10 +50,13 @@
 Используется для пар «термин — определение» (словари, FAQ).
 
 ```html
-<dl>
-    <dt>HTML</dt> <dd>Язык разметки веб-страниц.</dd> </dl>
-
+<dl>     /* Description или Definition List */
+    <dt>HTML</dt> /* Description Term */
+    <dd>Язык разметки веб-страниц.</dd> /* Description Details */
+</dl>
 ```
+> 💡 **Примечание:** В нашей работе мы будем использовать `<ul>`, так как это самый распространённый тег.
+>     **Правило:** если есть два или более одинаковых элемента по смыслу — используем список.
 
 ---
 
@@ -88,18 +92,19 @@
 
 * **По тегу:** Меняет все теги на странице (например, все `p`).
 * **По классу:** Самый гибкий способ. В HTML пишем `class="имя"`, в CSS пишем `.имя`.
-
-```css
-.success { color: green; font-weight: bold; }
-.error { color: red; }
-
-```
-
 ```html
 <p class="success">Регистрация прошла успешно!</p>
 
-```
 
+.success {
+        color: green;
+        font-weight: bold;
+}
+.error {
+        color: red;
+}
+
+```
 ---
 
 ## 3.2 Цвета в CSS
@@ -115,12 +120,25 @@
 | Свойство | Значение | Описание |
 | --- | --- | --- |
 | **font-size** | 16px, 2rem | Размер шрифта |
+| **font-style** | italic | наклон щрифта|
 | **font-weight** | bold, 400, 700 | Толщина текста |
 | **text-decoration** | none, underline | Оформление (убрать подчеркивание у ссылок) |
-| **text-transform** | uppercase, capitalize | Регистр (ВСЕ ЗАГЛАВНЫЕ) |
-| **text-align** | center, justify | Выравнивание |
+| **text-transform** | uppercase, capitalize, lowercase | Регистр, ВСЕ ЗАГЛАВНЫЕ, все буквы маленькие |
+| **text-align** | left, center, right, justify | Выравнивание |
 | **list-style-type** | none, square, decimal | Вид маркера в списках |
 
+```
+список ul - list-style-type: disc;    /* ● */
+            list-style-type: circle;  /* ○ */
+            list-style-type: square;  /* ■ */
+            list-style-type: none;    /* без маркеров */
+список ol - list-style-type: decimal;     /* 1, 2, 3 */
+            list-style-type: lower-alpha; /* a, b, c */
+            list-style-type: upper-alpha; /* A, B, C */
+            list-style-type: lower-roman; /* i, ii, iii */
+            list-style-type: upper-roman; /* I, II, III */
+```
+**Ссылка на документацию:** [https://www.w3schools.com/css/default.asp](https://www.w3schools.com/css/default.asp)
 ---
 
 ## 🛠 Практическое задание: Портфолио-визитка
