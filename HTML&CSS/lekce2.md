@@ -125,7 +125,7 @@
 | **text-decoration** | none, underline | Оформление (убрать подчеркивание у ссылок) |
 | **text-transform** | uppercase, capitalize, lowercase | Регистр, ВСЕ ЗАГЛАВНЫЕ, все буквы маленькие |
 | **text-align** | left, center, right, justify | Выравнивание |
-| **list-style-type** | none, square, decimal | Вид маркера в списках |
+| **list-style** | none | Убрать маркер в списках |
 
 ```
 список ul - list-style-type: disc;    /* ● */
