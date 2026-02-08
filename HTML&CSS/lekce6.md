@@ -132,7 +132,7 @@
 input::placeholder { color: green; font-size: 18px; } /* Стили подсказки */
 input:enabled { border: 2px solid green; }           /* Активное поле */
 input:disabled { background: #f0f0f0; border-color: gray; } /* Заблокированное */
-input:checked { outline: 2px solid orange; }          /* При нвжвтии на чек-бокс */
+input:checked { outline: 2px solid orange; }          /* При нажатии на чек-бокс */
 input:in-range { background-color: #e0ffe0; }        /*  Срабатывает, когда введенное значение находится внутри границ min и max */
 input:out-of-range { background-color: #ffe0e0; }    /* Срабатывает, когда введенное значение находится вне заданного диапазона */
 input:valid { border-color: blue; }                  /* Верно заполнено */
