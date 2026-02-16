@@ -250,6 +250,7 @@ box-shadow: <x-offset> <y-offset> <blur> <spread> <color>,
 * **[Kraken.io](https://kraken.io/)** — мощный оптимизатор, поддерживающий множество форматов, включая SVG и GIF. Имеет режимы сжатия с потерей и без потери качества.
 * **[CSS Gradient](https://cssgradient.io/)** — максимально полный инструмент. Помимо генератора, содержит огромную библиотеку готовых решений и обучающие статьи.
 * **[Box-shadow.art](https://box-shadow.art/)** — содержит множество готовых пресетов теней, которые можно доработать под свой дизайн.
+* **[Box shadow css generator](https://cssgenerator.org/box-shadow-css-generator.html)** —  мощный инструмент для генерации теней.
 ---
 ### 🗺 Навигация:
 
