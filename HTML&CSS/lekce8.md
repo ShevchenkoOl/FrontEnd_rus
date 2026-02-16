@@ -36,6 +36,12 @@
 
 * `background-color` — цвет фона.
 * `background-image: url('...')` — путь к файлу.
+* `background-repeat: repeat | repeat-x | repeat-y | no-repeat`
+                      **repeat - повторять по X и Y, это значение по умолчанию.**
+                      repeat-x - повторять только по X, то есть по горизонтали.
+                      repeat-y - повторять только по Y, то есть по вертикали.
+                      no-repeat - не повторять.
+![Образец котиков](./images/repeat.jpg)
 * `background-size`:
 * `cover` — заполняет весь блок (может обрезать края).
 * `contain` — вписывает картинку целиком.
