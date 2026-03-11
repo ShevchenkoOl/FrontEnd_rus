@@ -6,21 +6,21 @@
 
 | № | Тема лекции | Материалы |
 |---|--------------|:---:|
-| 1 | Ввод в JS: переменные, типы данных, prompt/alert | [Лекция 1](./lecture-01/) |
-| 2 | Числа и строки: Math, NaN, методы строк | [Лекция 2](./lecture-02/) |
-| 3 | Логика: Boolean, if...else, тернарный оператор | [Лекция 3](./lecture-03/) |
-| 4 | Управление потоком: Switch, циклы for/while | [Лекция 4](./lecture-04/) |
-| 5 | Структуры данных: Массивы и Объекты | [Лекция 5](./lecture-05/) |
-| 6 | Функции: Declaration, Expression, Arrow functions | [Лекция 6](./lecture-06/) |
-| 7 | Callbacks и методы массивов: map, filter, reduce | [Лекция 7](./lecture-07/) |
-| 8 | DOM: работа с элементами, классами и атрибутами | [Лекция 8](./lecture-08/) |
-| 9 | События: Event Delegation, работа с формами | [Лекция 9](./lecture-09/) |
-| 10 | Хранилища: LocalStorage, SessionStorage, JSON | [Лекция 10](./lecture-10/) |
-| 11 | Асинхронность: Promises, Async/Await, Fetch | [Лекция 11](./lecture-11/) |
-| 12 | HTTP запросы: CRUD, Axios, работа с API | [Лекция 12](./lecture-12/) |
-| 13 | Инструменты: Vite, ES6 Modules, ToDo Project | [Лекция 13](./lecture-13/) |
-| 14 | Основы ООП и тестирование | [Лекция 14](./lecture-14/) |
-| 15 | Подготовка к защите проекта | [Лекция 15](./lecture-15/) |
+| 1 | Ввод в JS: переменные, типы данных, prompt/alert | [Лекция 1](./lekce1.md) |
+| 2 | Числа и строки: Math, NaN, методы строк | [Лекция 2](./lekce2.md) |
+| 3 | Логика: Boolean, if...else, тернарный оператор | [Лекция 3](./lekce3.md) |
+| 4 | Управление потоком: Switch, циклы for/while | [Лекция 4](./lekce4.md) |
+| 5 | Структуры данных: Массивы и Объекты | [Лекция 5](./lekce5.md) |
+| 6 | Функции: Declaration, Expression, Arrow functions | [Лекция 6](./lekce6.md) |
+| 7 | Callbacks и методы массивов: map, filter, reduce | [Лекция 7](./lekce7.md) |
+| 8 | DOM: работа с элементами, классами и атрибутами | [Лекция 8](./lekce8.md) |
+| 9 | События: Event Delegation, работа с формами | [Лекция 9](./lekce9.md) |
+| 10 | Хранилища: LocalStorage, SessionStorage, JSON | [Лекция 10](./lekce10.md) |
+| 11 | Асинхронность: Promises, Async/Await, Fetch | [Лекция 11](./lekce11.md) |
+| 12 | HTTP запросы: CRUD, Axios, работа с API | [Лекция 12](./lekce12.md) |
+| 13 | Инструменты: Vite, ES6 Modules, ToDo Project | [Лекция 13](./lekce13.md) |
+| 14 | Основы ООП и тестирование | [Лекция 14](./lekce14.md) |
+| 15 | Подготовка к защите проекта | [Лекция 15](./lekce15.md) |
 
 ---
 
