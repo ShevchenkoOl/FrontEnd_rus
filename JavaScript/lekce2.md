@@ -3,7 +3,7 @@
 ## 1. Числа в JavaScript
 JavaScript, в отличие от других языков программирования, имеет всего один числовой тип данных — **Number**. Он универсальный и подходит для:
 - целых чисел (`10`, `-5`)
-- дробных чисел (`3.14`)
+- дробных чисел или число с плавающей точкой *floating-point number*(`3.14`)
 - специальных значений (`Infinity`, `NaN`)
 
 Любое число в JavaScript с помощью международного стандарта **IEEE 754** автоматически преобразуется к единому 64-битному формату. IEEE 754 определяет, как именно число должно храниться в памяти компьютера.
@@ -362,8 +362,45 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 **Задача 1: Форматировщик даты**
 Создайте страницу, которая спросит у пользователя день, месяц и год, и выведет на страницу дату в красивом формате. Используйте шаблонную строку.
 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+let day = prompt("Введите день:");
+let month = prompt("Введите месяц:");
+let year = prompt("Введите год:");
+
+document.body.innerHTML = `
+    <h1 class="title">Форматированная дата</h1>
+    <p class="paragraph">Вы ввели дату: <strong>${day}.${month}.${year}</strong></p>
+`;
+```
+
+</details>
+
 **Задача 2: Перевод температуры**
 Попросите пользователя ввести температуру в градусах Цельсия. Переведите её в Фаренгейты по формуле: `F = C * 1.8 + 32` (и наоборот `С = (5 * (F - 32)) / 9`). Выведите результат на страницу.
+
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Запрашиваем данные и сразу переводим введенную строку в число
+let celsiusInput = Number(prompt("Введите температуру в градусах Цельсия:"));
+let fahrenheitResult = celsiusInput * 1.8 + 32;
+
+let fahrenheitInput = Number(prompt("Введите температуру в градусах Фаренгейта:"));
+let celsiusResult = (5 * (fahrenheitInput - 32)) / 9;
+
+// Выводим результат на экран
+document.body.innerHTML = `
+    <h1 class="title">Конвертер температур</h1>
+    <p class="paragraph">${celsiusInput}°C — это ${fahrenheitResult}°F</p>
+    <p class="paragraph">${fahrenheitInput}°F — это ${celsiusResult}°C</p>
+`;
+```
+
+</details>
 
 **Задача 3: Округления**
 Пусть есть число `3.67892`. Выведите в консоль или на страницу:
@@ -373,9 +410,55 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 * обычное математическое округление
 * число, округленное строго до двух знаков после запятой
 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+let num = 3.67892;
+
+// Округление вниз
+let floorNum = Math.floor(num);
+
+// Округление вверх
+let ceilNum = Math.ceil(num);
+
+// Обычное математическое округление
+let roundNum = Math.round(num);
+
+// Округление до двух знаков после запятой (используем Number, так как toFixed возвращает строку)
+let fixedNum = Number(num.toFixed(2));
+
+// Выводим результаты на страницу
+document.body.innerHTML = `
+    <h1 class="title">Результаты округления числа ${num}</h1>
+    <p class="paragraph">Округление вниз: <strong>${floorNum}</strong></p>
+    <p class="paragraph">Округление вверх: <strong>${ceilNum}</strong></p>
+    <p class="paragraph">Обычное математическое: <strong>${roundNum}</strong></p>
+    <p class="paragraph">До двух знаков после запятой: <strong>${fixedNum}</strong></p>
+`;
+```
+
+</details>
+
 **Задача 4: Генератор случайного числа**
 Выведите случайное целое число от 1 до 100.
 *(Подсказка: используйте `Math.floor(Math.random() * 100) + 1`)*
+
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Генерируем случайное число от 1 до 100
+let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+// Выводим результат на страницу
+document.body.innerHTML = `
+    <h1 class="title">Генератор чисел</h1>
+    <p class="paragraph">Ваше случайное число: <strong>${randomNumber}</strong></p>
+`;
+```
+
+</details>
 
 **Задача 5: Проверка на число**
 Пользователь вводит что-то через `prompt()`. Определите:
@@ -383,6 +466,32 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 * можно ли перевести это в число
 * является ли результат `NaN`
 Выведите соответствующее сообщение (например, "Это корректное число" или "Вы ввели не число").
+
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Получаем данные от пользователя
+let userInput = prompt("Введите что-то:");
+
+// Пытаемся перевести введенную строку в число
+let checkNumber = Number(userInput);
+
+// Проверяем, является ли результат NaN (Not a Number)
+if (Number.isNaN(checkNumber)) {
+    document.body.innerHTML = `
+        <h1 class="title">Проверка значения</h1>
+        <p class="paragraph">Вы ввели не число.</p>
+    `;
+} else {
+    document.body.innerHTML = `
+        <h1 class="title">Проверка значения</h1>
+        <p class="paragraph">Это корректное число: <strong>${checkNumber}</strong></p>
+    `;
+}
+```
+
+</details>
 
 **Задача 6: Работа со строками**
 Пусть у вас есть строка: `const str = "JavaScript is awesome";`
@@ -393,6 +502,37 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 * замените слово "awesome" на "cool" и выведите результат
 * сделайте всю исходную строку в верхнем регистре
 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+const str = "JavaScript is awesome";
+
+// 1. Вычисляем длину строки
+let strLength = str.length;
+
+// 2. Извлекаем слово "JavaScript" (начинается с 0 индекса, длина слова 10 символов)
+let extractedWord = str.slice(0, 10);
+
+// 3. Заменяем слово "awesome" на "cool"
+let replacedStr = str.replace("awesome", "cool");
+
+// 4. Переводим всю исходную строку в верхний регистр
+let upperStr = str.toUpperCase();
+
+// Выводим все результаты на страницу
+document.body.innerHTML = `
+    <h1 class="title">Работа со строками</h1>
+    <p class="paragraph">Исходная строка: <strong>${str}</strong></p>
+    <p class="paragraph">Длина строки: <strong>${strLength}</strong></p>
+    <p class="paragraph">Извлеченное слово: <strong>${extractedWord}</strong></p>
+    <p class="paragraph">Строка после замены: <strong>${replacedStr}</strong></p>
+    <p class="paragraph">В верхнем регистре: <strong>${upperStr}</strong></p>
+`;
+```
+
+</details>
+
 **Задача 7: Создание логина**
 Пользователь вводит имя и фамилию. Сформируйте email-логин формата: `<имя>.<фамилия>@gmail.com`.
 Обязательно используйте:
@@ -400,6 +540,30 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 * `trim()` (чтобы убрать случайные пробелы при вводе)
 * `toLowerCase()` (логины всегда пишутся маленькими буквами)
 * шаблонные строки
+
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Запрашиваем имя и фамилию у пользователя
+let firstName = prompt("Введите ваше имя:");
+let lastName = prompt("Введите вашу фамилию:");
+
+// Очищаем строки от случайных пробелов по краям и переводим в нижний регистр
+let cleanFirstName = firstName.trim().toLowerCase();
+let cleanLastName = lastName.trim().toLowerCase();
+
+// Формируем email-логин с помощью шаблонной строки
+let email = `${cleanFirstName}.${cleanLastName}@gmail.com`;
+
+// Выводим результат на страницу
+document.body.innerHTML = `
+    <h1 class="title">Регистрация завершена</h1>
+    <p class="paragraph">Ваш новый логин: <strong>${email}</strong></p>
+`;
+```
+
+</details>
 
 **Задача 8: Расчёт цены с НДС**
 Напишите программу, которая:
@@ -410,9 +574,33 @@ console.log(`Привет, ${name}!`); // "Привет, Alex!"
 * общую цену без НДС
 * сумму НДС (21%)
 * общую цену с НДС
-
-
 4. Выведет все три значения пользователю с помощью `alert()`.
+
+<details>
+  <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Запрашиваем цену и количество, сразу преобразуя введенные строки в числа
+let pricePerUnit = Number(prompt("Введите цену за 1 штуку (без НДС):"));
+let quantity = Number(prompt("Введите количество штук:"));
+
+// 1. Рассчитываем общую цену без НДС
+let totalWithoutVat = pricePerUnit * quantity;
+
+// 2. Рассчитываем сумму НДС (21%)
+let vatSum = totalWithoutVat * 0.21;
+
+// 3. Рассчитываем общую цену с НДС
+let totalWithVat = totalWithoutVat + vatSum;
+
+// Выводим все три значения с помощью alert() и шаблонной строки
+alert(`Результаты расчёта:
+- Общая цена без НДС: ${totalWithoutVat}
+- Сумма НДС (21%): ${vatSum}
+- Общая цена с НДС: ${totalWithVat}`);
+```
+
+</details>
 
 ### 🛠 Полезные ссылки
 
