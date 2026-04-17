@@ -39,14 +39,24 @@ window.document; // То же самое (document всегда находитс
     ```javascript
     const elements = document.getElementsByTagName("div");
     ```
-  * **`querySelector(selector)`** — современный и универсальный метод. Возвращает **первый** элемент, который совпадает с CSS-селектором.
+  * **`getAttribute("id")`** — возвращает найденый атрибут в **елементе**, если атрибут не найден вернет `null`.
     ```javascript
+    const img = document.getElementsByTagName("img");
+    const atr = img.getAttribute("alt");       // Важно, понимать что атрибуты есть только у елементов, а объект `document` — это не HTML-тег. Это просто глобальная «обертка», которая представляет всю вашу веб-страницу целиком
+    ```
+  * **`querySelector(selector)`** — современный и универсальный метод. Возвращает **первый** элемент, который совпадает с CSS-селектором, тегом, id или атрибутом.
+    ```javascript
+    const ul = document.querySelector("ul");
     const first = document.querySelector(".list > li:first-child");
+    const btn = document.querySelector("#btn");
+    const img = document.querySelector("[alt="Котик"]");
+    const inputField = document.querySelector('input[type="text"]'); // более строгий поиск, ищем input, у которого type равен "text"
+    
     ```
   * **`querySelectorAll(selector)`** — возвращает статический массив (NodeList) всех найденных элементов.
     ```javascript
     const nodes = document.querySelectorAll(".card");
-    ```
+    ``` 
 
 ### Навигация по DOM-дереву (отталкиваясь от элемента `elem`):
 
@@ -59,17 +69,17 @@ window.document; // То же самое (document всегда находитс
 
 -----
 
-## 3\. Свойства и атрибуты элементов
+## 3. Свойства и атрибуты элементов
 
 При построении DOM-дерева многие стандартные HTML-атрибуты становятся свойствами JS-объектов.
 
 ```html
-<img class="image" src="[https://picsum.photos/id/9/320/240](https://picsum.photos/id/9/320/240)" alt="A laptop" width="300" />
+<img class="image" src="https://picsum.photos/id/9/320/240" alt="A laptop" width="300" />
 ```
 
 ```javascript
 const image = document.querySelector(".image");
-console.log(image.src); // "[https://picsum.photos/id/9/320/240](https://picsum.photos/id/9/320/240)"
+console.log(image.src); // https://picsum.photos/id/9/320/240
 ```
 
 Часто используемые свойства:
@@ -81,11 +91,26 @@ console.log(image.src); // "[https://picsum.photos/id/9/320/240](https://picsum.
 ### 3.1 Свойство `textContent` и `innerHTML`
 
   * **`textContent`** — позволяет читать или менять **только текст** внутри элемента. Браузер игнорирует любые HTML-теги, переданные сюда (защита от XSS).
-    ```javascript
-    const textEl = document.querySelector(".article-text");
-    textEl.textContent = "Привет, мир!"; 
-    ```
+  >**XSS (Cross-Site Scripting, или Межсайтовый скриптинг)** — это тип хакерской атаки, при которой злоумышленник умудряется внедрить свой вредоносный JavaScript-код на твой сайт. А «защита от XSS» — это то, как мы не даем ему это сделать.
+
+ ```javascript
+const textEl = document.querySelector(".article-text");
+textEl.textContent = "Привет, мир!"; 
+```
   * **`innerHTML`** — позволяет читать или полностью заменять содержимое элемента вместе с HTML-тегами.
+```javascript
+const box = document.querySelector('.box');
+box.innerHTML = '<h2>А вот и новый заголовок!</h2>
+                 <button>Нажми меня</button>';
+```
+>📢 **Интересно**
+>Используйте свойство `elem.innerHTML = ` для добавления только тогда, когда элемент `elem` пустой, или если нужно полностью заменить его содержимое.
+>При исполльзовании свойства `elem.innerHTML += ` браузер полностью пересоздаёт всё содержимое элемента заново <br>
+>Из-за этого:<br>
+>❌ удаляются все старые DOM-элементы<br>
+>❌ пропадают обработчики событий (addEventListener)<br>
+>❌ может ухудшиться производительность<br>
+>**Поэтому += — это быстрый, но не всегда безопасный способ**
 
 ### 3.2 Свойство `style` (Инлайновые стили)
 
@@ -119,23 +144,36 @@ themeBtn.addEventListener('click', () => {
 ### 3.4 Атрибуты (`setAttribute`, `getAttribute`)
 
 Доступ к произвольным HTML-атрибутам (особенно полезно для `data-*` атрибутов).
+>**data- * атрибуты** — это специальные пользовательские атрибуты в HTML, которые позволяют программистам (то есть нам, разработчикам) хранить дополнительную, скрытую информацию прямо внутри HTML-тегов, чтобы потом легко забирать ее с помощью JavaScript.
+>**Например:** Допустим, мы делаем интернет-магазин, и у нас есть карточка товара — смартфона.
+>```javascript
+  ><div class="product-card">
+  >   <h3>iPhone 15</h3>
+  >   <button class="buy-btn">Купить</button>
+  ></div>
+>```
+>Нам нужно как-то сообщить нашему JavaScript-коду, что это за товар, какой у него артикул (ID) и сколько он стоит, чтобы при клике на кнопку «Купить» мы добавили в корзину правильную вещь. Мы могли бы спрятать эти данные в классах, но это неудобно и неправильно.
+> Здесь нас спасают data-* атрибуты! Мы добавляем их прямо в HTML-тег:
+>```javascript
+  ><div class="product-card" data-product-id="4829" data-price="999" data-category="smartphones">
+  >   <h3>iPhone 15</h3>
+  >   <button class="buy-btn">Купить</button>
+  ></div>
+>```
 
   * `elem.hasAttribute(name)` — проверяет наличие (`true`/`false`).
   * `elem.getAttribute(name)` — получает значение.
   * `elem.setAttribute(name, value)` — устанавливает значение.
   * `elem.removeAttribute(name)` — удаляет атрибут.
 
-<!-- end list -->
-
 ```javascript
 const img = document.querySelector('img');
 img.setAttribute('title', 'Милый котик');
-console.log(img.getAttribute('src')); 
 ```
 
 -----
 
-## 4\. Манипуляции с DOM
+## 4. Манипуляции с DOM
 
 ### 4.1 Создание элементов
 
@@ -153,8 +191,37 @@ div.classList.add('container');
   * **`container.prepend(el1)`** — добавляет в **начало** (внутрь) элемента.
   * **`container.before(el1)`** — вставляет **до** элемента (снаружи).
   * **`container.after(el1)`** — вставляет **после** элемента (снаружи).
+>**Примечание:** Все эти четыре современных метода, работают по одному и тому же принципу и все они умеют принимать сразу несколько аргументов (как элементы, так и просто текст).
 
-**`insertAdjacentHTML`** — вставка HTML-строки в конкретную позицию:
+```javascript
+   const messageBox = document.querySelector('.message-box');
+   // Создаем первый элемент (иконку)
+
+   const icon = document.createElement('span');
+   icon.textContent = '👋 ';
+ 
+   // Создаем второй элемент (имя пользователя)
+   const userName = document.createElement('strong');
+   userName.textContent = 'Alex';
+   userName.style.color = 'blue';
+  
+   // Вставляем всё сразу за одну команду!
+   // Порядок аргументов = порядок на странице
+   messageBox.append(icon, userName, ', добро пожаловать на наш сайт!');
+```
+Кроме классических методов добавлений елементов может встечаться `appendChild` - это более старый синтаксис, но всё ещё рабочий. Главное отличие в том, что `appendChild` принимает только один DOM-элемент, нельзя передать строку, возвращает добавленный элемент.
+
+**`insertAdjacentHTML`** — вставка HTML-строки в конкретную позицию. Это современный метод для добавления строки с HTML-тегами перед, после или внутрь элемента.
+Решает проблему `innerHTML`, связанную с повторной сериализацией содержимого элемента при добавлении разметки к уже существующей.
+```javascript
+elem.insertAdjacentHTML(position, string);
+```
+Аргумент `position` — это строка, которая задаёт положение относительно элемента `elem`.<br>
+Принимает одно из четырёх значений:<br>
+* **"beforebegin"** — перед `elem`
+* **"afterbegin"** — внутри `elem`, перед всеми дочерними элементами
+* **"beforeend"** — внутри `elem`, после всех дочерних элементов
+* **"afterend"** — после elem
 
 ```html
 <div class="container">
@@ -165,8 +232,24 @@ div.classList.add('container');
 ```javascript
 container.insertAdjacentHTML('beforeend', '<p>В конец контейнера</p>');
 ```
+**‼️ Внимание**, главные отличия `insertAdjacentHTML` от методов `container.append...`:
 
+* С помощью `insertAdjacentHTML` мы передаём строку HTML, и браузер парсит её, превращает в DOM-узлы и вставляет в нужное место. То есть мы передаём браузеру чертёж, по которому он сам всё создаёт и добавляет в HTML-разметку.
+* `container.append()` — здесь мы работаем напрямую с DOM-узлами, и готовые элементы мы передаём в браузер. То есть браузер ничего не парсит, ничего не создаёт, а просто берёт наш готовый вариант и добавляет его в нужное место HTML-разметки. Простыми словами, `container.append()` — это работа с реальными стройматериалами (кирпичами), из которых мы строим вручную.
+
+**Когда что использовать:**
+
+✅ **insertAdjacentHTML:**
+* когда у тебя есть готовая HTML-строка, например, шаблон: `box.insertAdjacentHTML('beforeend', '<li class="item">Товар</li>');`
+* но в целях кибербезопасности он может быть уязвим к XSS (если вставлять пользовательский ввод), и вообще работа со строками менее контролируема.
+
+✅ **append:**
+* когда создаёшь элементы через JS;
+* когда есть обработчики событий;
+* когда важна безопасность (лучше подходит для сложной логики).
+  
 ### 4.3 Замена и удаление элементов
+Чтобы удалить элемент, используется метод `remove()`. Он вызывается на элементе `elem`, который необходимо удалить.
 
 ```javascript
 const element = document.querySelector('.remove-me');
@@ -185,19 +268,11 @@ container.innerHTML = '';
 
 -----
 
-## 🛠 Полезные ссылки
-
-  * **[learn.javascript.ru: DOM-дерево](https://learn.javascript.ru/dom-nodes)** — подробнее о том, как браузер видит страницу.
-  * **[learn.javascript.ru: Поиск getElement\*, querySelector\*](https://learn.javascript.ru/searching-elements-dom)** — разница между живыми и статичными коллекциями.
-  * **[learn.javascript.ru: Изменение документа](https://learn.javascript.ru/modifying-document)** — шпаргалка по методам `append`, `prepend`, `before`, `after`.
-
------
-
 ## 💻 Практические задания
-
-\<details\>
-\<summary\>\<strong\>Задание 1: Создать структуру\</strong\> Создай через JavaScript \<code\>div.container\</code\> с заголовком, параграфом и кнопкой внутри. Добавь всё в \<code\>body\</code\>. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 1: Создать структуру:** Создай через JavaScript `div.container`с заголовком, параграфом и кнопкой внутри. Добавь всё в `body`.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 // Создаем элементы
 const container = document.createElement('div');
@@ -215,14 +290,14 @@ button.textContent = 'Кнопка';
 container.append(h1, p, button); // Можно передать сразу несколько через append
 
 // Добавляем в body
-document.body.appendChild(container);
+document.body.append(container);
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 2: Изменить существующий элемент\</strong\> Найди \<code\>div id="box" class="old"\</code\>. Измени текст на "Новый текст", класс на "new", добавь атрибут \<code\>data-status="active"\</code\> и сделай фон \<code\>lightblue\</code\>. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 2: Изменить существующий элемент:** Найди `div id="box" class="old"`. Измени текст на `Новый текст`, класс на `new`, добавь атрибут `data-status="active"` и сделай фон `lightblue`. 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const box = document.getElementById('box');
 
@@ -231,12 +306,12 @@ box.className = 'new';
 box.setAttribute('data-status', 'active');
 box.style.backgroundColor = 'lightblue';
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 3: Создать список\</strong\> Создай список \<code\>ul\</code\> с 5 элементами \<code\>li\</code\> (текст: "Элемент 1", "Элемент 2" и т.д.) через цикл. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 3: Создать список** Создай список `<ul>` с 5 элементами `<li>` и текстом: `"Элемент 1", "Элемент 2" и т.д.` через цикл. 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const ul = document.createElement('ul');
 
@@ -248,14 +323,14 @@ for (let i = 1; i <= 5; i++) {
 
 document.body.appendChild(ul);
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 4: Добавление в разные позиции\</strong\> Дан контейнер с параграфом \<code\>\#middle\</code\>. Добавь параграфы "Начало" (перед middle), "Конец" (после middle) и заголовки h2 до и после самого контейнера. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 4: Добавление в разные позиции** Дан контейнер `#middle` с параграфом. Добавь параграфы `"Начало"` перед элементом `middle`, `"Конец"` после элемента `middle` и заголовки `<h2>` до и после самого контейнера.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
-const container = document.getElementById('container');
+dococument.getElementById('container');
 const middle = document.getElementById('middle');
 
 // В начало и в конец внутри container
@@ -276,12 +351,12 @@ const h2After = document.createElement('h2');
 h2After.textContent = 'После контейнера';
 container.after(h2After);
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 5: Удаление элементов\</strong\> Удали из списка все элементы с классом \<code\>remove-me\</code\> и отдельно удали самый первый элемент списка. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 5: Удаление элементов** Удали из списка все элементы с классом `remove-me` и отдельно удали самый первый элемент списка. 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 // Удаляем все элементы с классом remove-me
 const removeElements = document.querySelectorAll('.remove-me');
@@ -291,12 +366,12 @@ removeElements.forEach(el => el.remove());
 const list = document.getElementById('list');
 list.firstElementChild.remove();
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 6: Замена элемента\</strong\> Замени \<code\>p id="old"\</code\> на новый \<code\>div class="new"\</code\> с текстом "Новый div". 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 6: Замена элемента** Замени `<p id="old">` на новый `<div class="new">` с текстом `"Новый div"`.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const oldElement = document.getElementById('old');
 
@@ -306,12 +381,12 @@ newElement.textContent = 'Новый div';
 
 oldElement.replaceWith(newElement);
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 7: Создать таблицу\</strong\> Напиши код, который генерирует таблицу 3x3 с числами от 1 до 9 в ячейках. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 7: Создать таблицу** Напиши код, который генерирует таблицу 3x3 с числами от 1 до 9 в ячейках.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const table = document.createElement('table');
 let counter = 1;
@@ -331,11 +406,12 @@ for (let i = 0; i < 3; i++) {
 document.body.appendChild(table);
 ```
 
-\</details\>
+</details>
 
-\<details\>
-\<summary\>\<strong\>Задание 8: Работа с классами\</strong\> Дан \<code\>div id="box" class="red large"\</code\>. Добавь класс "active", удали "large", переключи "red" и замени "active" на "inactive". 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 8: Работа с классами** Дан `<div id="box" class="red large">`. Добавь класс `active`, удали `large`, переключи `red` и замени `active` на `inactive`.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const box = document.getElementById('box');
 
@@ -344,19 +420,21 @@ box.classList.remove('large');
 box.classList.toggle('red');
 box.classList.replace('active', 'inactive');
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 9: Создать карточки товаров\</strong\> Есть массив объектов. Создай для каждого товара карточку с картинкой, заголовком и ценой, и добавь их в DOM. 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 9: Создать карточки товаров** Есть массив объектов. Создай для каждого товара карточку с картинкой, заголовком и ценой, и добавь их в DOM.
 ```javascript
 const products = [
     { name: 'Товар 1', img: 'product1.jpg', price: 1000 },
     { name: 'Товар 2', img: 'product2.jpg', price: 2000 },
     { name: 'Товар 3', img: 'product3.jpg', price: 3000 }
 ];
+```
 
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
+```javascript
 products.forEach(product => {
     const div = document.createElement('div');
     div.className = 'product';
@@ -377,12 +455,12 @@ products.forEach(product => {
     document.body.appendChild(div);
 });
 ```
+</details>
 
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Задание 10: Навигация по DOM\</strong\> Внутри \<code\>\#parent\</code\> найди: второго ребенка (измени текст), последнего (добавь класс), первого (добавь перед ним новый элемент). 👉 \<b\>Посмотреть решение\</b\>\</summary\>
-
+**Задание 10: Навигация по DOM** Внутри элемента `#parent` найди: второго ребенка измени текст, последнего ребёнка и добавь класс, первого ребёнка и добавь перед ним новый элемент.
+<details>
+  <summary>💡 Посмотреть решение</summary>
+ 
 ```javascript
 const parent = document.getElementById('parent');
 
@@ -397,11 +475,17 @@ const newDiv = document.createElement('div');
 newDiv.textContent = 'Нулевой';
 parent.firstElementChild.before(newDiv);
 ```
+</details>
 
-\</details\>
+-----
 
-```
----
+## 🛠 Полезные ссылки
+
+  * **[learn.javascript.ru: DOM-дерево](https://learn.javascript.ru/dom-nodes)** — подробнее о том, как браузер видит страницу.
+  * **[learn.javascript.ru: Поиск getElement\*, querySelector\*](https://learn.javascript.ru/searching-elements-dom)** — разница между живыми и статичными коллекциями.
+  * **[learn.javascript.ru: Изменение документа](https://learn.javascript.ru/modifying-document)** — шпаргалка по методам `append`, `prepend`, `before`, `after`.
+
+
 
 ### 🗺 Навигация:
 
