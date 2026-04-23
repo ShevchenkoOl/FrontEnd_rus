@@ -50,15 +50,29 @@ button.onclick = function() {
 ---
 
 ### **Синтаксис:**
-`element.addEventListener(type, listener, [options]);`
-
+```javascript
+element.addEventListener(type, listener, [options]);
+```
 * **`type`**: Тип события (например, `"click"`, `"input"`).
 * **`listener`**: Функция-обработчик, которая вызывается при наступлении события.
 * **`options`**: Необязательный объект настроек, который дает тонкий контроль над поведением браузера.
 
+**Или пример с именованной функцией (улучшает читабельность):**
+```javascript
+const button = document.querySelector(".my-button");
+
+const handleClick = () => {
+    console.log("Button was clicked");
+};
+
+button.addEventListener("click", handleClick);
+```
+На одном элементе может быть несколько обработчиков. Они будут вызываться в порядке их регистрации в коде.
+
 ---
 
-### **Основные опции (options):**
+### 📢 Дополнительно:
+**Основные опции (options):**
 
 1. **`capture`** (логическое значение)
     * **`false`** (по умолчанию) — обработчик сработает на **фазе всплытия** (*bubbling*).
@@ -99,20 +113,6 @@ button.addEventListener('click', handler, {
 controller.abort(); // Это мгновенно удалит обработчик
 ```
 > **Это современная и мощная альтернатива `removeEventListener`.**
-
----
-
-**Пример с именованной функцией (улучшает читабельность):**
-```javascript
-const button = document.querySelector(".my-button");
-
-const handleClick = () => {
-    console.log("Button was clicked");
-};
-
-button.addEventListener("click", handleClick);
-```
-На одном элементе может быть несколько обработчиков. Они будут вызываться в порядке их регистрации в коде.
 
 ---
 
@@ -188,12 +188,13 @@ form.addEventListener("submit", (e) => {
 
 ## 4. Объект события (Event Object)
 
-Для полноценной обработки нам недостаточно знать сам факт клика. Каждое событие передает в функцию специальный объект с деталями.
+**4.1** Для полноценной обработки нам недостаточно знать сам факт клика. Каждое событие передает в функцию специальный объект с деталями.
 
 **Разница между `target` и `currentTarget`:**
 * `event.target` — элемент, по которому был совершен реальный клик (самый глубокий тег).
 * `event.currentTarget` — элемент, на котором висит обработчик `addEventListener`.
 
+**4.2 Из полезных функций event:**
 ```javascript
 document.addEventListener("keydown", event => {
   console.log("key", event.key);  // "a" (зависит от языка раскладки)
@@ -235,6 +236,11 @@ window.addEventListener('load', () => {
 });
 ```
 ---
+### 📝 Практическое задание:
+* [Слушатели событий (GitHub)](https://github.com/ShevchenkoOl/practic_for_JS1.git) — отработка навыков `addEventListener()`.
+---
+
+
 
 ## 🛠 Полезные ссылки
 * **[learn.javascript.ru: Введение в браузерные события](https://learn.javascript.ru/introduction-browser-events)** — база про `addEventListener`, обработчики и объект события (`event`).
