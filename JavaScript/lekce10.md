@@ -61,7 +61,33 @@ console.log(localStorage.length);
 
 ---
 
-## 3. Формат JSON (JavaScript Object Notation)
+## 3. Схема работы с localStorage на каждый день
+
+**1️⃣ Простые значения (строка / число / булево)**
+JSON не обязателен. Сохраняем как есть, при получении приводим к нужному типу.
+```javascript
+localStorage.setItem("username", "Alex"); // → "Alex"
+localStorage.setItem("age", 26);          // → "26" (строка!)
+localStorage.setItem("isAdmin", true);    // → "true" (строка!)
+
+// Получение:
+const age = Number(localStorage.getItem("age"));
+```
+
+**2️⃣ Сложные значения (объекты / массивы)**
+JSON строго обязателен!
+```javascript
+const notes = ["note1", "note2"];
+
+localStorage.setItem("notes", JSON.stringify(notes));
+// В браузере хранится как сырая строка: '["note1","note2"]'
+
+const savedNotes = JSON.parse(localStorage.getItem("notes")); 
+// Снова получаем полноценный массив!
+```
+
+---
+## 4. Формат JSON (JavaScript Object Notation)
 
 ⚠️ **Главное правило Web Storage: он умеет хранить только СТРОКИ.**
 
@@ -97,57 +123,78 @@ console.log(parsedUser.name); // "Alex"
 
 ---
 
-## 4. Схема работы с localStorage на каждый день
-
-**1️⃣ Простые значения (строка / число / булево)**
-JSON не обязателен. Сохраняем как есть, при получении приводим к нужному типу.
-```javascript
-localStorage.setItem("username", "Alex"); // → "Alex"
-localStorage.setItem("age", 26);          // → "26" (строка!)
-localStorage.setItem("isAdmin", true);    // → "true" (строка!)
-
-// Получение:
-const age = Number(localStorage.getItem("age"));
-```
-
-**2️⃣ Сложные значения (объекты / массивы)**
-JSON строго обязателен!
-```javascript
-const notes = ["note1", "note2"];
-
-localStorage.setItem("notes", JSON.stringify(notes));
-// В браузере хранится как сырая строка: '["note1","note2"]'
-
-const savedNotes = JSON.parse(localStorage.getItem("notes")); 
-// Снова получаем полноценный массив!
-```
-
----
-
-## 5. Демонстрация: симулятор LocalStorage и JSON
-
-Чтобы наглядно увидеть, как массив превращается в строку и обратно, ниже представлен симулятор. В левой части — интерфейс приложения, а в правой — то, как эти данные в реальном времени выглядят «под капотом» в памяти браузера в виде `JSON`.
-
-```json?chameleon
-{"component":"LlmGeneratedComponent","props":{"height":"700px","prompt":"Создать интерактивный симулятор работы LocalStorage и JSON. Objective: Показать, как интерфейс приложения связан с сырыми строковыми данными в локальном хранилище браузера. Data State: Массив объектов notes: []. Strategy: Standard Layout. Inputs: Поле ввода текста заметки, кнопка 'Добавить'. На каждой добавленной заметке кнопка 'Удалить'. Behavior: Разделить экран на две колонки. Левая колонка ('Интерфейс пользователя') — список заметок (ul/li). Правая колонка ('Под капотом: localStorage (JSON)') — визуальный блок, имитирующий DevTools браузера, показывающий реальное содержимое хранилища в виде сырой JSON-строки (например, '[{\"text\":\"Купить хлеб\"}]'). При добавлении/удалении заметки левая часть обновляется визуально, а правая часть мгновенно показывает изменение сырой JSON-строки. При пустом списке справа показывать '[]'. Интерфейс на русском языке.","id":"im_5ed189822f6f763b"}}
-```
-
----
-
-## 6. Самостоятельная практика: Mini Notes App (Список заметок)
-
-**Требования:**
+## Самостоятельная работа.
+Список заметок с сохранением (Mini Notes App). Нам дан статистический input для ввода текста заметки, кнопка «Добавить», список заметок (по умолнанию он пуст). <br>
+Наша задача:
 * При добавлении заметка появляется в списке.
-* Все заметки сохраняются в `localStorage` как массив объектов.
-* При перезагрузке страницы заметки восстанавливаются.
+* Все заметки сохраняются в localStorage.
+* После перезагрузки страницы заметки восстанавливаются.
 * Каждую заметку можно удалить.
-
-**HTML:**
+* localStorage хранит массив объектов, а не строки.
+    
 ```html
 <input type="text" id="noteInput" placeholder="Введите заметку">
 <button id="addNote">Добавить</button>
 <ul id="notesList"></ul>
 ```
+<details>
+    <summary>💡 Посмотреть решение</summary>
+
+```javascript
+// Получаем элементы
+const input = document.getElementById("noteInput");
+const addBtn = document.getElementById("addNote");
+const list = document.getElementById("notesList");
+
+// Загружаем заметки из localStorage
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+// 📌 Если в хранилище ничего нет — используем пустой массив.
+
+
+// Функция отрисовки списка
+function renderNotes() {
+  list.innerHTML = "";
+
+  notes.forEach((note, index) => {
+    const li = document.createElement("li");
+    li.textContent = note.text;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Удалить";
+
+    deleteBtn.addEventListener("click", () => {
+      notes.splice(index, 1);
+      saveNotes();
+      renderNotes();
+    });
+
+    li.append(deleteBtn);
+    list.append(li);
+  });
+}
+
+// Сохранение в localStorage
+function saveNotes() {
+  localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+// Добавление новой заметки
+addBtn.addEventListener("click", () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  notes.push({ text });
+  saveNotes();
+  renderNotes();
+
+  input.value = "";
+});
+
+// Восстановление при загрузке
+renderNotes();
+```
+
+</details>
 
 ---
 
