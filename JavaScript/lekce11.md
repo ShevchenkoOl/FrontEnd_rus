@@ -45,7 +45,7 @@ setTimeout(() => {
 console.log("Third log");
 // Результат: First log, Third log, Second log
 ```
-![async&sync.](./images/async,png")
+![async&sync](./images/async.png")
 ---
 
 ## 2. Под капотом: Event Loop (Цикл событий)
