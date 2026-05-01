@@ -60,173 +60,172 @@ json-server --watch db.json --port 3001
 
 В прошлой лекции мы использовали встроенный `fetch`. В реальных проектах разработчики чаще выбирают библиотеку **Axios**. Почему?
 
+**Axios** — это мощная и очень популярная библиотека для выполнения HTTP-запросов (GET, POST, PUT, DELETE и т.д.) из браузера или Node.js.
+
 1. **Автоматический JSON:** В `fetch` нужно писать `await res.json()`. В Axios ответ уже преобразован в JavaScript-объект: `const data = res.data;`.
 2. **Умная обработка ошибок:** Для `fetch` ответы с ошибкой 404 или 500 не считаются ошибкой сети, и код идет дальше. В Axios любой HTTP-ответ с кодом ошибки (400-500) автоматически отправляется в блок `catch`.
 3. **Универсальность:** Axios одинаково хорошо работает и в браузере, и на сервере (Node.js).
 
----
+### 3.1. Как установить Axios
 
-Чтобы наглядно понять, как работают методы **POST, PUT, PATCH и DELETE** под капотом, попробуйте этот интерактивный тренажер. Нажимайте на кнопки и смотрите, как меняется JSON-база данных и какой HTTP-запрос отправляется по сети:
+Выбор способа установки зависит от того, как устроен ваш проект.
 
-```json?chameleon
-{"component":"LlmGeneratedComponent","props":{"height":"750px","prompt":"Создать интерактивный симулятор REST API и CRUD операций. Objective: Показать, как HTTP-методы (GET, POST, PUT, PATCH, DELETE) изменяют JSON базу данных. Data State: Стартовый массив 'posts': [{ 'id': '1', 'author': 'Анна', 'content': 'Привет!', 'likes': 0 }]. Strategy: Standard Layout. Inputs: Кнопки для выполнения конкретных запросов: 'GET /posts' (обновить данные), 'POST /posts' (создать новый случайный пост), 'PATCH /posts/1' (добавить лайк первому посту), 'PUT /posts/1' (полностью перезаписать первый пост), 'DELETE /posts/1' (удалить первый пост). Behavior: Разделить интерфейс на две основные зоны. Левая зона — Панель управления с кнопками-методами. Правая зона — 'Сервер', состоящая из двух блоков: 1) 'Network Log' (Консоль сети), где появляется строчка с отправленным запросом и статусом (например, '➡️ POST /posts... 201 Created'), 2) 'db.json (База данных)', где в реальном времени красиво отображается текущий массив 'posts' в формате JSON. При клике на кнопки в левой панели, обновлять Network Log и соответствующим образом изменять JSON в правой панели. Интерфейс на русском языке.","id":"im_f27ea67dc5cef5eb"}}
+**Вариант А: Если вы используете сборщик (Vite, Webpack, React, Vue и т.д.) или Node.js**
+Откройте терминал в папке с проектом и выполните одну из команд:
+```bash
+# Для npm
+npm install axios
+
+# Для yarn
+yarn add axios
+```
+После установки библиотеку нужно импортировать в ваш JS-файл:
+```javascript
+import axios from 'axios';
 ```
 
----
-
-## 4. Практика: Моя социальная сеть
-
-Давайте напишем интерфейс, который будет использовать все методы CRUD через `axios` для работы с нашим `json-server`.
-
-**HTML:**
+**Вариант Б: Если у вас простой HTML-файл без сборщика**
+Вы можете подключить Axios напрямую через CDN, добавив этот тег `<script>` в ваш `index.html` (обычно перед вашим `main.js`):
 ```html
-<h1>Моя социальная сеть</h1>
-<input type="text" id="author" placeholder="Имя">
-<textarea id="content" placeholder="Напиши что-нибудь..."></textarea>
-<button id="submitPost">Добавить пост</button>
-<hr>
-<ul id="postList"></ul>
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 ```
 
-**JavaScript:**
+---
+
+### 3.2. Синтаксис Axios
+
+В современном JavaScript стандартом является использование конструкции **`async/await`** вместе с блоком **`try/catch`** для отлова ошибок. 
+
+#### GET-запрос (Получение данных)
+Самый частый запрос, чтобы получить список пользователей, посты или другие данные с сервера.
+
 ```javascript
-const postList = document.getElementById("postList");
-const submitBtn = document.getElementById("submitPost");
-const authorInput = document.getElementById("author");
-const contentInput = document.getElementById("content");
-
-// Переменная для хранения ID редактируемого поста
-let editPostId = null;
-
-// ============================
-// 1. ЧТЕНИЕ (READ) -> GET
-// ============================
-const loadPosts = async () => {
-    try {
-        const res = await axios.get("http://localhost:3001/posts");
-        const data = res.data; // Данные уже готовы к работе!
-        
-        postList.innerHTML = ""; // Очищаем список перед рендером
-
-        data.forEach(post => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-                <strong>${post.author}</strong>: ${post.content}<br>
-                <small>💬 Лайки: ${post.likes || 0}</small><br><br>
-            `;
-
-            // Кнопка Лайк (PATCH)
-            const btnLike = document.createElement("button");
-            btnLike.textContent = "❤️ Лайк";
-            btnLike.addEventListener("click", () => likePost(post));
-
-            // Кнопка Редактировать
-            const btnEdit = document.createElement("button");
-            btnEdit.textContent = "✏️ Ред.";
-            btnEdit.addEventListener("click", () => openEditForm(post));
-
-            // Кнопка Удалить (DELETE)
-            const btnDel = document.createElement("button");
-            btnDel.textContent = "🗑️ Удалить";
-            btnDel.addEventListener("click", () => deletePost(post.id));
-
-            li.append(btnLike, btnEdit, btnDel);
-            postList.appendChild(li);
-        });
-    } catch (error) {
-        console.error("Ошибка загрузки постов", error);
-    }
-};
-
-// Загружаем посты при старте страницы
-loadPosts();
-
-// ============================
-// 2. СОЗДАНИЕ (CREATE) -> POST
-//    ОБНОВЛЕНИЕ (UPDATE) -> PUT
-// ============================
-submitBtn.addEventListener("click", async () => {
-    const author = authorInput.value.trim();
-    const content = contentInput.value.trim();
-
-    if (!author || !content) {
-        alert("Заполните имя и текст поста.");
-        return; 
-    }
-
-    try {
-        if (editPostId) {
-            // Если есть editPostId, значит мы редактируем старый пост (PUT)
-            await axios.put(`http://localhost:3001/posts/${editPostId}`, {
-                author: author,
-                content: content,
-                likes: 0 // PUT перезаписывает объект целиком!
-            });
-            editPostId = null;
-            submitBtn.textContent = "Добавить пост";
-        } else {
-            // Иначе создаем новый пост (POST)
-            await axios.post("http://localhost:3001/posts", {
-                id: String(Date.now()), // Сервер требует строковый ID
-                author: author,
-                content: content,
-                likes: 0 
-            });
-        }
-
-        // Очищаем форму и обновляем список
-        authorInput.value = "";
-        contentInput.value = "";
-        loadPosts();
-
-    } catch (error) {
-        console.error("Ошибка при сохранении поста", error);
-    }
-});
-
-// ============================
-// 3. УДАЛЕНИЕ (DELETE) -> DELETE
-// ============================
-async function deletePost(id) {
-    try {
-        await axios.delete(`http://localhost:3001/posts/${id}`);
-        loadPosts(); // Обновляем экран
-    } catch (error) {
-        console.error("Ошибка при удалении поста", error);
-    }
+async function fetchUsers() {
+  try {
+    // Делаем GET запрос по указанному URL
+    const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+    
+    // В Axios данные от сервера всегда лежат внутри свойства .data
+    console.log('Список пользователей:', response.data);
+    
+  } catch (error) {
+    // Если сервер упал или нет интернета, ошибка попадет сюда
+    console.error('Произошла ошибка:', error.message);
+  }
 }
 
-// ============================
-// 4. ЧАСТИЧНОЕ ОБНОВЛЕНИЕ -> PATCH
-// ============================
-async function likePost(post) {
-    try {
-        // PATCH меняет только одно свойство, не трогая остальные
-        await axios.patch(`http://localhost:3001/posts/${post.id}`, {
-            likes: (post.likes || 0) + 1
-        });
-        loadPosts(); // Обновляем экран
-    } catch (error) {
-        console.error("Ошибка при лайке поста", error);
-    }
-}
-
-// ============================
-// 5. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ (Подготовка к PUT)
-// ============================
-function openEditForm(post) {
-    authorInput.value = post.author;
-    contentInput.value = post.content;
-    submitBtn.textContent = "Сохранить изменения";
-    editPostId = post.id; // Запоминаем ID, чтобы POST превратился в PUT
-}
+fetchUsers();
 ```
-### 🛠 Полезные онлайн-инструменты
 
-* **[SassMeister](https://www.google.com/search?q=https://www.sassmeister.com/)** — лучший онлайн-компилятор. Если под рукой нет VS Code, можно проверить любую идею прямо в браузере.
-* **[BeautifyTools Sass to CSS](https://www.google.com/search?q=https://beautifytools.com/sass-to-css-converter.php)** — быстрый конвертер, если нужно перегнать старый кусок кода.
+#### POST-запрос (Отправка данных)
+Используется, когда нужно создать что-то новое (зарегистрировать пользователя, отправить форму, добавить товар).
+
+```javascript
+async function createPost() {
+  // Данные, которые мы хотим отправить (Axios сам превратит их в JSON)
+  const newPost = {
+    title: 'Мой новый пост',
+    body: 'Текст поста',
+    userId: 1
+  };
+
+  try {
+    // В axios.post первым аргументом идет URL, а вторым — объект с данными
+    const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
+    
+    console.log('Пост успешно создан!', response.data);
+    
+  } catch (error) {
+    console.error('Ошибка при отправке:', error.message);
+  }
+}
+
+createPost();
+```
+
+#### PUT / PATCH и DELETE (Обновление и удаление)
+Синтаксис абсолютно такой же, меняется только название метода:
+
+```javascript
+// PUT (Полное обновление) или PATCH (Частичное обновление)
+const response = await axios.patch(`https://api.example.com/users/1`, { name: 'Иван' });
+
+// DELETE (Удаление)
+const response = await axios.delete(`https://api.example.com/users/1`);
+```
+
+### 💡 Главные фишки Axios (почему он лучше обычного `fetch`):
+1. **`response.data`:** В отличие от `fetch`, где нужно писать `await response.json()`, Axios распаковывает JSON автоматически.
+2. **Ошибки сервера:** Если сервер ответит ошибкой `404 Not Found` или `500 Server Error`, Axios **автоматически** перебросит выполнение в блок `catch`. (С обычным `fetch` приходилось вручную проверять `if (!response.ok)`).
+---
+
+## 📝 Самостоятельная работа: «Дашборд Баристы» (Управление заказами кофейни)
+
+**Цель:** Закрепить навыки работы с библиотекой Axios, понять архитектуру REST API и реализовать все 4 операции CRUD (создание, чтение, обновление, удаление) в связке с пользовательским интерфейсом.
+
+**Вводная:** Вы разрабатываете панель управления (дашборд) для баристы в новой модной кофейне. Заказы поступают в систему, бариста видит их на экране, может отмечать их как «Готовые» или удалять (выдавать клиенту). 
+
+### ⚙️ Подготовка: Создаем своё API
+Поскольку мы frontend-разработчики, мы не будем писать бэкенд. Мы его сгенерируем!
+1. Зайдите на сайт [mockapi.io](https://mockapi.io/) (войдите через GitHub или Google).
+2. Создайте новый проект (назовите его `CoffeeShop`).
+3. Создайте новый ресурс (New Resource) и назовите его `orders`.
+4. В схеме ресурса (Schema) задайте следующие поля:
+   * `id` (создается автоматически)
+   * `customerName` (String) — имя клиента.
+   * `coffeeType` (String) — тип напитка (Капучино, Латте, Эспрессо и т.д.).
+   * `isReady` (Boolean) — статус готовности (по умолчанию `false`).
+5. Скопируйте ваш уникальный URL (он будет выглядеть примерно так: `[https://64a1b2c3d4e5...mockapi.io/orders](https://64a1b2c3d4e5...mockapi.io/orders)`). Это ваш `API_URL`.
+
+---
+
+### 📋 Техническое задание (Шаги разработки):
+
+**Шаг 1: Инициализация проекта**
+* Создайте проект на Vite (`npm create vite@latest coffee-dashboard`).
+* Установите библиотеку Axios: `npm install axios`.
+* Очистите `main.js` и создайте базовую разметку в `index.html` (форму для заказа и контейнер для списка).
+
+**Шаг 2: Реализация Read (Чтение)**
+* Напишите асинхронную функцию `fetchOrders()`, которая делает `axios.get(API_URL)`.
+* Получив массив заказов с сервера, отрисуйте их на экране в виде карточек.
+* Каждая карточка должна содержать: имя клиента, название кофе, текущий статус (Готовится / Готов), кнопку «Изменить статус» и кнопку «Выдать (Удалить)».
+* *Обязательно вызывайте `fetchOrders()` при загрузке страницы.*
+
+**Шаг 3: Реализация Create (Создание)**
+* Создайте в HTML форму с двумя инпутами (Имя клиента, Тип кофе) и кнопкой «Добавить заказ».
+* Повесьте слушатель на отправку формы (`submit`).
+* Соберите данные из инпутов и сделайте запрос `axios.post(API_URL, newOrder)`, где `newOrder` — это объект: `{ customerName: "Иван", coffeeType: "Латте", isReady: false }`.
+* После успешного ответа сервера очистите форму и заново вызовите `fetchOrders()`, чтобы список на экране обновился.
+
+**Шаг 4: Реализация Update (Обновление)**
+* Когда бариста нажимает кнопку «Изменить статус» на карточке, заказ должен стать готовым.
+* Сделайте запрос `axios.put(API_URL + '/' + id, updatedOrder)` (или `axios.patch`), передав на сервер объект с измененным статусом: `{ isReady: true }`.
+* После успешного ответа сервера, обновите список (`fetchOrders()`).
+* *Визуальное улучшение:* Если `isReady` равно `true`, покрасьте карточку в зеленый цвет.
+
+**Шаг 5: Реализация Delete (Удаление)**
+* Когда клиент забрал свой кофе, бариста нажимает кнопку «Выдать» (или крестик).
+* Сделайте запрос `axios.delete(API_URL + '/' + id)`.
+* После успешного ответа сервера, удалите заказ с экрана (вызвав `fetchOrders()`).
+
+---
+
+### 🌟 Дополнительное задание (со звёздочкой):
+1. **Обработка ошибок:** Оберните все ваши Axios-запросы в блоки `try...catch`. Если пропал интернет или API недоступно, покажите пользователю красивое уведомление (через `alert` или отрисуйте ошибку красным текстом в DOM).
+2. **Лоадер (Спиннер):** Пока запрос летит на сервер и возвращается обратно (особенно при `fetchOrders`), показывайте на экране надпись «Загрузка заказов...» или анимированный спиннер, а потом скрывайте его. 
+
+**Ожидаемый результат:** Полноценное веб-приложение, которое общается с реальным удаленным сервером. При перезагрузке страницы данные не пропадают (в отличие от обычных массивов в JS), так как они хранятся в базе данных MockAPI.
+
+---
+
+## 🔗 Полезные ссылки к Лекции 12 (HTTP, Axios и CRUD)
+
+1. **[Официальная документация Axios](https://axios-http.com/ru/docs/intro)** — Переведена на русский язык. Отличный старт, чтобы понять, как делать GET, POST, PUT и DELETE запросы.
+2. **[Learn.javascript.ru: Fetch и основы сетевых запросов](https://learn.javascript.ru/fetch)** — Хотя вы изучаете Axios, понимать, как работает встроенный `fetch`, под капотом которого работает сеть в браузере, строго обязательно.
+3. **[REST API простыми словами (статья на Хабре)](https://habr.com/ru/articles/483202/)** — Что такое REST, почему URL строятся определенным образом и зачем нужны разные HTTP-методы (GET, POST и т.д.).
+4. **[MockAPI.io](https://mockapi.io/)** — Идеальный бесплатный сервис для обучения. Позволяет за 1 минуту создать собственное облачное API (базу данных), которое будет отвечать на все CRUD-запросы, без необходимости писать бэкенд на Node.js.
+5. **[JSON Server (GitHub)](https://github.com/typicode/json-server)** — Альтернатива MockAPI. Позволяет создать полноценное API прямо у себя на компьютере из одного локального файла `db.json`.
 
 ---
 
