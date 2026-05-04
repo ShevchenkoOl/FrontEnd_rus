@@ -1,3 +1,12 @@
+### Лекция 15 — ООП
+
+классы в JS
+this, constructor
+инкапсуляция
+пример:
+класс TodoApp
+класс ApiService
+
 ### 🛠 Полезные онлайн-инструменты
 
 * **[SassMeister](https://www.google.com/search?q=https://www.sassmeister.com/)** — лучший онлайн-компилятор. Если под рукой нет VS Code, можно проверить любую идею прямо в браузере.
