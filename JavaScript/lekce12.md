@@ -193,7 +193,7 @@ const response = await axios.delete(`https://api.example.com/users/1`);
    * `customerName` (String) — имя клиента.
    * `coffeeType` (String) — тип напитка (Капучино, Латте, Эспрессо и т.д.).
    * `isReady` (Boolean) — статус готовности (по умолчанию `false`).
-5. Скопируйте ваш уникальный URL (он будет выглядеть примерно так: `[https://64a1b2c3d4e5...mockapi.io/orders](https://64a1b2c3d4e5...mockapi.io/orders)`). Это ваш `API_URL`.
+5. Скопируйте ваш уникальный URL (он будет выглядеть примерно так: `https://64a1b2c3d4e5...mockapi.io/orders`. Это ваш `API_URL`.
 
 ---
 
