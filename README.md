@@ -29,7 +29,7 @@
 ### 🐙 [Основы Git и GitHub](./git&GitHub.md)
 Руководство по установке и настройке Git и GitHub, а также основы командной разработки и решение конфликтов.
 
-### 🎥 <a https://youtu.be/KJHHV6bu0YU?si=ib1m9g2mOp8r-HOL" target="_blank" rel="noopener noreferrer">Видео: Руководство по установке и настройке Git и GitHub.</a>
+### 🎥 <a href="https://youtu.be/KJHHV6bu0YU?si=ib1m9g2mOp8r-HOL" target="_blank" rel="noopener noreferrer">Видео: Руководство по установке и настройке Git и GitHub.</a>
 Разбор  базового алгоритма: как создать репозиторий на своём компьютере и отправить его на GitHub, а также как в обратном порядке — склонировать чужой репозиторий себе на ПК.
 
 ---
